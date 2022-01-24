@@ -1,10 +1,20 @@
-﻿using System;
+﻿using Kashkeshet.ServerCore.Abstracts;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Kashkeshet.ServerImplementations.Chats
 {
-    public class PublicChat
+    public class PublicChat : ChatBase
     {
+        public PublicChat(ISet<ClientBase> clients) : base(clients)
+        {
+        }
+
+        public override Task UpdateAllClients()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
