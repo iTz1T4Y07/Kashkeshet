@@ -15,13 +15,13 @@ namespace Kashkeshet.LogicBll
             _chats = new Dictionary<Guid, ChatBase>();
         }
 
-        IList<IMessage> GetMessages(Guid id)
+        IList<Message> GetMessages(Guid id)
         {
             if (_chats.ContainsKey(id))
             {
                 return _chats[id].GetMessages();
             }
-            return new List<IMessage>();
+            return new List<Message>();
         }
 
         IDictionary<Guid, string> GetClients(Guid id)

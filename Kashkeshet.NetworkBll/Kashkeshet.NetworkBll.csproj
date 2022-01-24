@@ -4,4 +4,19 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Json" Version="4.7.1" />
+    <PackageReference Include="System.Text.Json" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kashkeshet.LogicBll\Kashkeshet.LogicBll.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Kashkeshet.Common">
+      <HintPath>..\Kashkeshet.Common\bin\Debug\netcoreapp3.1\Kashkeshet.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -10,10 +10,10 @@ namespace Kashkeshet.LogicBll.Abstracts
     public abstract class ChatBase
     {
         public readonly Guid Id;
-        protected IList<IMessage> Messages;
+        protected IList<Message> Messages;
         protected IDictionary<Guid, string> Clients;
 
-        public virtual IList<IMessage> GetMessages() => Messages.Select(item => item).ToList();
+        public virtual IList<Message> GetMessages() => Messages.Select(item => item).ToList();
 
         public virtual IDictionary<Guid, string> GetClients()
         {
@@ -25,7 +25,7 @@ namespace Kashkeshet.LogicBll.Abstracts
             return clientsCopy;
         }
 
-        public virtual Task AddMessage(IMessage message)
+        public virtual Task AddMessage(Message message)
         {
             return Task.Run(() => Messages.Add(message));
         }

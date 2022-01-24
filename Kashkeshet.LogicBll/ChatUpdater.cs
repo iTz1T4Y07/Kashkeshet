@@ -17,7 +17,7 @@ namespace Kashkeshet.LogicBll
             _chats = chats;
         }
 
-        public Task AddMessageToChat(IMessage message, Guid chatId)
+        public Task AddMessageToChat(Message message, Guid chatId)
         {
             return Task.Run(() =>
             {

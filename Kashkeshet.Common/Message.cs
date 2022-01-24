@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Kashkeshet.Common
 {
+    [Serializable]
     public class Message
     {
         public MessageType Type { get; }
