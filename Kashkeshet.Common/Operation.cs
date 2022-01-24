@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Kashkeshet.Common
 {
-    public class Operation
+    public enum Operation
     {
+        SendMessage
     }
 }
