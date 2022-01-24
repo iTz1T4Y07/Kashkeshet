@@ -32,5 +32,10 @@ namespace Kashkeshet.LogicBll
             }
             return new Dictionary<Guid, string>();
         }
+
+        public void AddNewChat(ChatBase chat)
+        {
+            _chats.Add(chat.Id, chat);
+        }
     }
 }
