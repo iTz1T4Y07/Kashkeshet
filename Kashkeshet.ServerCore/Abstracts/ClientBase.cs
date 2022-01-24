@@ -14,10 +14,10 @@ namespace Kashkeshet.ServerCore.Abstracts
         protected TcpClient Client;
         protected string Name;
 
-        public ClientBase(TcpClient client, string name)
+        public ClientBase(TcpClient client)
         {
             Client = client;
-            Name = name;
+            Name = string.Empty;
         }
 
         public async Task ReceiveNewOrder(CancellationToken token) // Receiving new orders from network

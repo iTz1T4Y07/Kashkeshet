@@ -10,7 +10,7 @@ namespace Kashkeshet.ServerImplementations.Clients
 {
     public class RegularClient : ClientBase
     {
-        public RegularClient(TcpClient client, string name) : base(client, name)
+        public RegularClient(TcpClient client) : base(client)
         {
         }
 
