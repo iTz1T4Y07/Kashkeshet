@@ -4,7 +4,10 @@ using System.Text;
 
 namespace Kashkeshet.Common
 {
-    public class IMessage
+    public interface IMessage<T>
     {
+        public MessageType Type { get; }
+
+        public T GetValue();
     }
 }
