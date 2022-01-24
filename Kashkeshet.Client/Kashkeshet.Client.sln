@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.NetworkBll", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.LogicBll", "..\Kashkeshet.LogicBll\Kashkeshet.LogicBll.csproj", "{273643C8-3EBD-4B97-9210-01C667B554F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.ConsoleUI", "..\Kashkeshet.ConsoleUI\Kashkeshet.ConsoleUI.csproj", "{C66F3D32-27BC-4589-B678-C18B529EB2F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.ConsoleUI", "..\Kashkeshet.ConsoleUI\Kashkeshet.ConsoleUI.csproj", "{B386DA5A-0757-4D21-BE7C-BCC02ADB8D9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{273643C8-3EBD-4B97-9210-01C667B554F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{273643C8-3EBD-4B97-9210-01C667B554F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{273643C8-3EBD-4B97-9210-01C667B554F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C66F3D32-27BC-4589-B678-C18B529EB2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C66F3D32-27BC-4589-B678-C18B529EB2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C66F3D32-27BC-4589-B678-C18B529EB2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C66F3D32-27BC-4589-B678-C18B529EB2F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B386DA5A-0757-4D21-BE7C-BCC02ADB8D9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B386DA5A-0757-4D21-BE7C-BCC02ADB8D9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B386DA5A-0757-4D21-BE7C-BCC02ADB8D9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B386DA5A-0757-4D21-BE7C-BCC02ADB8D9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
