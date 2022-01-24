@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Kashkeshet.Common
 {
-    public class MessageType
+    public enum MessageType
     {
+        TextMessage
     }
 }
