@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Kashkeshet.Common
 {    
-    public interface IMessage<T>
+    public interface IMessage
     {
         public MessageType Type { get; }
 
-        public T GetValue();
+        public object GetValue();
     }
 }
