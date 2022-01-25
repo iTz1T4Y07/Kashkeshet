@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kashkeshet.LogicBll\Kashkeshet.LogicBll.csproj" />
+    <ProjectReference Include="..\Kashkeshet.NetworkBll\Kashkeshet.NetworkBll.csproj" />
+  </ItemGroup>
+
 </Project>
