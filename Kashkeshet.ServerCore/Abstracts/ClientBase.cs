@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Kashkeshet.Common;
+using System;
 using System.Collections.Generic;
+using System.Json;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -9,15 +12,21 @@ namespace Kashkeshet.ServerCore.Abstracts
 {
     public abstract class ClientBase
     {
+        public event Action<
 
         public readonly Guid Id = Guid.NewGuid();
         protected TcpClient Client;
         protected string Name;
 
-        public ClientBase(TcpClient client)
+        private DataSerializer _serializer;
+        private ClientOrderHandler _orderHandler;
+
+        public ClientBase(TcpClient client, DataSerializer serializer, ClientOrderHandler orderHandler)
         {
             Client = client;
             Name = string.Empty;
+            _serializer = serializer;
+            _orderHandler = orderHandler;
         }
 
         public async Task ReceiveNewOrder(CancellationToken token) // Receiving new orders from network
@@ -34,7 +43,12 @@ namespace Kashkeshet.ServerCore.Abstracts
         }
 
         public abstract Task<bool> UpdateClient(); // Sending updates to remote client via network
-        protected abstract Task HandleNewOrder(byte[] data, CancellationToken token); // Handling new order
+        protected virtual async Task HandleNewOrder(byte[] data, CancellationToken token) // Handling new order
+        {
+            Operation operationReceived = Enum.Parse<Operation>(data[0].ToString());
+            JsonObject argumentsReceived = _serializer.Serialize(data.TakeLast(data.Length - 1).ToArray());
+            await _orderHandler.HandleOperation(operationReceived, argumentsReceived);
+        }
 
         protected async Task<byte[]> ReadNewMessage(NetworkStream stream, CancellationToken token)
         {
