@@ -23,7 +23,8 @@ namespace Kashkeshet.ServerCore
 
         public Task AddMessageToChat(Guid chatId, Message message)
         {
-            throw new NotImplementedException():
+            throw new NotImplementedException();
+
         }
 
 

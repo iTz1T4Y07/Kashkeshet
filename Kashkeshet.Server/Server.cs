@@ -30,6 +30,7 @@ namespace Kashkeshet.Server
             DataSerializer serializer = new DataSerializer();
             DataDeserializer deserializer = new DataDeserializer();
             ClientOrderHandler clientOrderHandler = new ClientOrderHandler();
+            _chatsUpdater.InitializeUpdater(clientOrderHandler);
             while (_listener.Server.IsBound)
             {
                 TcpClient newClientConnection = await _listener.AcceptTcpClientAsync();
