@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Json;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,15 +23,17 @@ namespace Kashkeshet.ServerCore.Abstracts
 
         public bool TryRemoveClient(ClientBase client) => ConnectedClients.Remove(client);
 
+        public IDictionary<Guid, string> GetClients() => ConnectedClients.ToDictionary(client => client.Id, client => client.Name);
+       
         public virtual async Task UpdateAllClients(Operation operation, JsonObject arguments, CancellationToken token)
         {
-            await foreach(ClientBase client in GetClients())
+            await foreach(ClientBase client in GetClientsAsync())
             {
                 await client.UpdateClient(operation, arguments, token);
             }
         }
 
-        private async IAsyncEnumerable<ClientBase> GetClients()
+        private async IAsyncEnumerable<ClientBase> GetClientsAsync()
         {
             foreach(ClientBase client in ConnectedClients)
             {
