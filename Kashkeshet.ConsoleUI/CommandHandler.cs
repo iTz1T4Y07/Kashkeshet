@@ -10,7 +10,7 @@ namespace Kashkeshet.ConsoleUI
     {
         private ServerCommunicator _communicator;
 
-        public Task HandleNewCommand()
+        public Task HandleNewCommand(string command)
         {
             return Task.Run(() => { }) ;
         }
