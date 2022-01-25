@@ -1,7 +1,11 @@
-﻿using Kashkeshet.NetworkBll;
+﻿using Kashkeshet.Common;
+using Kashkeshet.NetworkBll;
 using System;
 using System.Collections.Generic;
+using System.Json;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kashkeshet.ConsoleUI
@@ -9,10 +13,24 @@ namespace Kashkeshet.ConsoleUI
     public class CommandHandler
     {
         private ServerCommunicator _communicator;
+        private ChatScreen _currentChat;
 
-        public Task HandleNewCommand(string command)
+        public CommandHandler(ServerCommunicator communicator, ChatScreen chat)
         {
-            return Task.Run(() => { }) ;
+            _communicator = communicator;
+            _currentChat = chat;
+        }
+
+        public async Task HandleNewCommand(string command, CancellationToken token)
+        {
+            Message newMessage = new Message(_communicator.UserId, MessageType.TextMessage, Encoding.ASCII.GetBytes(command));
+            string messageJsonString = JsonSerializer.Serialize(newMessage, typeof(Message));
+            IEnumerable<KeyValuePair<string, JsonValue>> items = new List<KeyValuePair<string, JsonValue>>();
+            JsonObject arguments = new JsonObject(items);
+            arguments.Add("chat_id", _currentChat.Id);
+            arguments.Add("message", messageJsonString);
+
+            await _communicator.SendOperation(Operation.SendMessage, arguments, token);
         }
     }
 }
