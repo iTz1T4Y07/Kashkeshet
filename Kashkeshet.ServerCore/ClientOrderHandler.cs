@@ -10,7 +10,7 @@ namespace Kashkeshet.ServerCore
 {
     public class ClientOrderHandler
     {
-        public event Func<Guid, Message, Task> AddMessageToChat;
+        public event Func<Guid, Message, Task> AddMessageToChat; //ChatsUpdater needs to register
 
         public async Task HandleOperation(Operation operation, JsonObject arguments)
         {
