@@ -2,6 +2,7 @@
 using Kashkeshet.LogicBll.Abstracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Kashkeshet.LogicBll
@@ -36,6 +37,15 @@ namespace Kashkeshet.LogicBll
         public void AddNewChat(ChatBase chat)
         {
             _chats.Add(chat.Id, chat);
+        }
+
+        public Guid GetMainChatId()
+        {
+            if(_chats.Count > 0)
+            {
+                return _chats.First().Key;
+            }
+            return Guid.Empty;
         }
     }
 }
