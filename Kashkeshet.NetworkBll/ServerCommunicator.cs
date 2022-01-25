@@ -14,20 +14,20 @@ namespace Kashkeshet.NetworkBll
 {
     public class ServerCommunicator
     {
-        public Guid UserId { get; private set; }
+        public ref Guid UserId { get=> ref UserId; }
 
         private OperationHandler _handler;
         private TcpClient _client;
         private DataSerializer _serializer;
         private DataDeserializer _deserializer;
 
-        public ServerCommunicator(OperationHandler operationHandler, DataSerializer serializer, DataDeserializer deserializer)
+        public ServerCommunicator(Guid id, OperationHandler operationHandler, DataSerializer serializer, DataDeserializer deserializer)
         {
-            UserId = Guid.Empty;
+            UserId = id;
             _client = new TcpClient();
             _handler = operationHandler;
             _serializer = serializer;
-            _deserializer = deserializer;
+            _deserializer = deserializer;            
             _handler.UpdateClientId += UpdateId;
         }
 

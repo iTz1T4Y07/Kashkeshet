@@ -10,13 +10,13 @@ namespace Kashkeshet.LogicBll
     {
         public event Action<Chat> ChatListUpdate;
         public event Action<Guid, Message> ChatMessageUpdate;
+        public ref Guid UserId { get => ref UserId; }
 
-        private readonly Guid _userId;
         private IDictionary<Guid, Chat> _chats;
 
-        public ChatUpdater(Guid userId, IDictionary<Guid, Chat> chats)
+        public ChatUpdater(ref Guid userId, IDictionary<Guid, Chat> chats)
         {
-            _userId = userId;
+            UserId = userId;
             _chats = chats;
         }
 
@@ -27,7 +27,7 @@ namespace Kashkeshet.LogicBll
                 if (_chats.ContainsKey(chatId))
                 {
                     _chats[chatId].AddMessage(message);
-                    if (_userId != message.SenderId)
+                    if (UserId != message.SenderId)
                     {
                         ChatMessageUpdate?.Invoke(chatId, message);
                     }

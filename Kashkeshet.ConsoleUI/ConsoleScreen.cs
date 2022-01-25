@@ -16,17 +16,17 @@ namespace Kashkeshet.ConsoleUI
         private ServerCommunicator _serverCommunicator;
         private CommandHandler _commandHandler;
 
-        public ConsoleScreen(ChatInformationExtractor informationExtractor, ServerCommunicator communicator, CommandHandler commandHandler, ChatUpdater updater)
+        public ConsoleScreen(ChatInformationExtractor informationExtractor, ServerCommunicator communicator, ChatUpdater updater)
         {
             _informationExtractor = informationExtractor;
             _serverCommunicator = communicator;
-            _commandHandler = commandHandler;
             Guid chatId = informationExtractor.GetMainChatId();
             if (chatId == Guid.Empty)
             {
                 throw new OperationCanceledException("Found 0 chats available.");
             }
             _currentChat = new ChatScreen(chatId, informationExtractor, updater);
+           _commandHandler = new CommandHandler(_serverCommunicator, _currentChat);
             updater.ChatMessageUpdate += ReceivedNewMessage;
         }
 
