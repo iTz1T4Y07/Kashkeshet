@@ -9,8 +9,9 @@ namespace Kashkeshet.Common
     {
         public JsonObject Serialize(byte[] data)
         {
-            //TODO: Implement
-            return new JsonObject();
+            string jsonString = Encoding.UTF8.GetString(data);
+            JsonObject jsonObject = (JsonObject)JsonObject.Parse(jsonString);
+            return jsonObject;
         }
     }
 }
