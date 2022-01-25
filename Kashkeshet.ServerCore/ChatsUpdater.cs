@@ -3,6 +3,7 @@ using Kashkeshet.ServerCore.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Json;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -12,10 +13,12 @@ namespace Kashkeshet.ServerCore
 {
     public class ChatsUpdater
     {
+        public readonly Guid _mainChatId;
         private IDictionary<Guid, ChatBase> _chats;
 
         public ChatsUpdater(IList<ChatBase> chats)
         {
+            _mainChatId = chats.First().id;
             _chats = new Dictionary<Guid, ChatBase>();
             foreach (ChatBase chat in chats)
             {
@@ -41,6 +44,15 @@ namespace Kashkeshet.ServerCore
             arguments.Add("message", JsonSerializer.Serialize(message, typeof(Message)));
             await _chats[chatId].UpdateAllClients(Operation.SendMessage, arguments, token);
 
+        }
+
+        public bool AddClientToChat(Guid chatId, ClientBase client)
+        {
+            if (_chats.ContainsKey(chatId))
+            {
+                return _chats[chatId].TryAddClient(client);
+            }
+            return false;
         }
 
 
