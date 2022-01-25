@@ -26,6 +26,7 @@ namespace Kashkeshet.ConsoleUI
                 throw new OperationCanceledException("Found 0 chats available.");
             }
             _currentChat = new ChatScreen(chatId, informationExtractor, updater);
+            updater.ChatMessageUpdate += ReceivedNewMessage;
         }
 
         public Task WaitForNewCommand()
@@ -33,15 +34,12 @@ namespace Kashkeshet.ConsoleUI
             throw new NotImplementedException();
         }
 
-        public Task ReceivedNewMessage(Guid chatId, Message message)
+        public void ReceivedNewMessage(Guid chatId, Message message)
         {
-            return Task.Run(() =>
+            if (chatId == _currentChat.Id)
             {
-                if (chatId == _currentChat.Id)
-                {
-                    _currentChat.PrintMessage(message);
-                }
-            });
+                _currentChat.PrintMessage(message);
+            }
         }
 
     }
