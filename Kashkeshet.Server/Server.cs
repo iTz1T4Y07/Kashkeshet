@@ -23,6 +23,7 @@ namespace Kashkeshet.Server
         {
             _listener = new TcpListener(IPAddress.Any, port);
             _chatsUpdater = new ChatsUpdater(chats);
+            _clientTokens = new Dictionary<ClientBase, CancellationTokenSource>();
         }
 
         public async Task Start()
