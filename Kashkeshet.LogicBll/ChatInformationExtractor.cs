@@ -10,9 +10,10 @@ namespace Kashkeshet.LogicBll
     {
         private IDictionary<Guid, Chat> _chats;
 
-        public ChatInformationExtractor()
+        public ChatInformationExtractor(ChatUpdater updater)
         {
             _chats = new Dictionary<Guid, Chat>();
+            updater.ChatListUpdate += AddNewChat;
         }
 
         public IList<Message> GetMessages(Guid id)
