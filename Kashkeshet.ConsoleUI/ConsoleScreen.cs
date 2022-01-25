@@ -1,4 +1,5 @@
-﻿using Kashkeshet.LogicBll;
+﻿using Kashkeshet.Common;
+using Kashkeshet.LogicBll;
 using Kashkeshet.NetworkBll;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Kashkeshet.ConsoleUI
     {
         private ChatScreen _currentChat;
         private ChatInformationExtractor _informationExtractor;
-        private ServerCommunicator _serverCommunicator;        
+        private ServerCommunicator _serverCommunicator;
         private CommandHandler _commandHandler;
 
         public ConsoleScreen(ChatInformationExtractor informationExtractor, ServerCommunicator communicator, CommandHandler commandHandler, ChatUpdater updater)
@@ -24,7 +25,7 @@ namespace Kashkeshet.ConsoleUI
             {
                 throw new OperationCanceledException("Found 0 chats available.");
             }
-            _currentChat = new ChatScreen(chatId , informationExtractor, updater);
+            _currentChat = new ChatScreen(chatId, informationExtractor, updater);
         }
 
         public Task WaitForNewCommand()
@@ -32,9 +33,15 @@ namespace Kashkeshet.ConsoleUI
             throw new NotImplementedException();
         }
 
-        public Task ReceivedNewMessage()
+        public Task ReceivedNewMessage(Guid chatId, Message message)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                if (chatId == _currentChat.Id)
+                {
+                    _currentChat.PrintMessage(message);
+                }
+            });
         }
 
     }
