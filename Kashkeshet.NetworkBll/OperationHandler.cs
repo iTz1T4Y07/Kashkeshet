@@ -36,7 +36,7 @@ namespace Kashkeshet.NetworkBll
                 return;
             }            
             Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);            
-            await _updater.AddMessageToChat(message, arguments["chat_id"]);
+            await _updater.AddMessageToChat(message, Guid.Parse(arguments["chat_id"]));
 
         }
     }
