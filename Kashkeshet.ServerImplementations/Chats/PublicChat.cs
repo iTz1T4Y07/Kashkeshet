@@ -12,9 +12,5 @@ namespace Kashkeshet.ServerImplementations.Chats
         {
         }
 
-        public override Task UpdateAllClients()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

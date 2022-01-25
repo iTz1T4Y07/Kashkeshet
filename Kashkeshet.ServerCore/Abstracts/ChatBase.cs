@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Kashkeshet.Common;
+using System;
 using System.Collections.Generic;
+using System.Json;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kashkeshet.ServerCore.Abstracts
@@ -19,6 +22,20 @@ namespace Kashkeshet.ServerCore.Abstracts
 
         public bool TryRemoveClient(ClientBase client) => ConnectedClients.Remove(client);
 
-        public abstract Task UpdateAllClients();
+        public virtual async Task UpdateAllClients(Operation operation, JsonObject arguments, CancellationToken token)
+        {
+            await foreach(ClientBase client in GetClients())
+            {
+                await client.UpdateClient(operation, arguments, token);
+            }
+        }
+
+        private async IAsyncEnumerable<ClientBase> GetClients()
+        {
+            foreach(ClientBase client in ConnectedClients)
+            {
+                yield return client;
+            }
+        }
     }
 }

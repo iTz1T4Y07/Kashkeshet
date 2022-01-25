@@ -1,4 +1,6 @@
-﻿using Kashkeshet.ServerCore.Abstracts;
+﻿using Kashkeshet.Common;
+using Kashkeshet.ServerCore;
+using Kashkeshet.ServerCore.Abstracts;
 using Kashkeshet.ServerImplementations.Clients;
 using System;
 using System.Collections.Generic;
@@ -25,10 +27,13 @@ namespace Kashkeshet.Server
         public async Task Start()
         {
             _listener.Start();
+            DataSerializer serializer = new DataSerializer();
+            DataDeserializer deserializer = new DataDeserializer();
+            ClientOrderHandler clientOrderHandler = new ClientOrderHandler();
             while (_listener.Server.IsBound)
             {
                 TcpClient newClientConnection = await _listener.AcceptTcpClientAsync();
-                ClientBase newClient = new RegularClient(newClientConnection);
+                ClientBase newClient = new RegularClient(newClientConnection, serializer, deserializer, clientOrderHandler);
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
                 _clientTokens.Add(newClient, tokenSource);
                 _ = newClient.ReceiveNewOrder(tokenSource.Token);
