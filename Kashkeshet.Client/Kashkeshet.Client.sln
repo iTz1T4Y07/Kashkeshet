@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.Client", "Kashkeshet.Client.csproj", "{BFB1EE84-890D-4422-B880-7F2503BC28FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kashkeshet.Client", "Kashkeshet.Client.csproj", "{BFB1EE84-890D-4422-B880-7F2503BC28FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.NetworkBll", "..\Kashkeshet.NetworkBll\Kashkeshet.NetworkBll.csproj", "{4B68C316-46C6-4026-885E-CF90E07B41EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kashkeshet.NetworkBll", "..\Kashkeshet.NetworkBll\Kashkeshet.NetworkBll.csproj", "{4B68C316-46C6-4026-885E-CF90E07B41EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.LogicBll", "..\Kashkeshet.LogicBll\Kashkeshet.LogicBll.csproj", "{273643C8-3EBD-4B97-9210-01C667B554F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kashkeshet.LogicBll", "..\Kashkeshet.LogicBll\Kashkeshet.LogicBll.csproj", "{273643C8-3EBD-4B97-9210-01C667B554F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kashkeshet.ConsoleUI", "..\Kashkeshet.ConsoleUI\Kashkeshet.ConsoleUI.csproj", "{B386DA5A-0757-4D21-BE7C-BCC02ADB8D9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kashkeshet.ConsoleUI", "..\Kashkeshet.ConsoleUI\Kashkeshet.ConsoleUI.csproj", "{B386DA5A-0757-4D21-BE7C-BCC02ADB8D9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

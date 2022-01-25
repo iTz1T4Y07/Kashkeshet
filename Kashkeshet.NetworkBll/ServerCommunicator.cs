@@ -14,6 +14,8 @@ namespace Kashkeshet.NetworkBll
 {
     public class ServerCommunicator
     {
+        public Guid UserId { get; private set; }
+
         private OperationHandler _handler;
         private TcpClient _client;
         private DataSerializer _serializer;
@@ -21,6 +23,7 @@ namespace Kashkeshet.NetworkBll
 
         public ServerCommunicator(OperationHandler operationHandler, DataSerializer Serializer, DataDeserializer deserializer)
         {
+            UserId = Guid.Empty;
             _client = new TcpClient();
             _handler = operationHandler;
             _serializer = Serializer;
