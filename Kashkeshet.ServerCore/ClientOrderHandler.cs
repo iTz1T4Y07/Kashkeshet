@@ -15,6 +15,7 @@ namespace Kashkeshet.ServerCore
 
         public async Task HandleOperation(Operation operation, JsonObject arguments, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             if (operation == Operation.SendMessage)
             {
                 if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("message"))
