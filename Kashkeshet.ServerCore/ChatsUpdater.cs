@@ -37,7 +37,7 @@ namespace Kashkeshet.ServerCore
             }
             IEnumerable<KeyValuePair<string, JsonValue>> items = new List<KeyValuePair<string, JsonValue>>();
             JsonObject arguments = new JsonObject(items);
-            arguments.Add("chat_id", chatId);
+            arguments.Add("chat_id", chatId.ToString());
             arguments.Add("message", JsonSerializer.Serialize(message, typeof(Message)));
             await _chats[chatId].UpdateAllClients(Operation.SendMessage, arguments, token);
 
