@@ -15,13 +15,13 @@ namespace Kashkeshet.Server
     public class Server
     {
         private TcpListener _listener;
-        private IList<ChatBase> _chats;
+        private ChatsUpdater _chatsUpdater;
         private IDictionary<ClientBase, CancellationTokenSource> _clientTokens;
 
         public Server(int port, IList<ChatBase> chats)
         {
             _listener = new TcpListener(IPAddress.Any, port);
-            _chats = chats;
+            _chatsUpdater = new ChatsUpdater(chats);
         }
 
         public async Task Start()
