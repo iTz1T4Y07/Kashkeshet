@@ -15,7 +15,7 @@ namespace Kashkeshet.LogicBll
             _chats = new Dictionary<Guid, ChatBase>();
         }
 
-        IList<Message> GetMessages(Guid id)
+        public IList<Message> GetMessages(Guid id)
         {
             if (_chats.ContainsKey(id))
             {
@@ -24,7 +24,7 @@ namespace Kashkeshet.LogicBll
             return new List<Message>();
         }
 
-        IDictionary<Guid, string> GetClients(Guid id)
+        public IDictionary<Guid, string> GetClients(Guid id)
         {
             if (_chats.ContainsKey(id))
             {
