@@ -4,6 +4,7 @@ using Kashkeshet.ServerCore.Abstracts;
 using Kashkeshet.ServerImplementations.Clients;
 using System;
 using System.Collections.Generic;
+using System.Json;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -38,8 +39,38 @@ namespace Kashkeshet.Server
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
                 _clientTokens.Add(newClient, tokenSource);
                 _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, newClient);
-                _ = newClient.ReceiveNewOrder(tokenSource.Token);
+
+                Task<bool> sendClientId = newClient.UpdateClient(Operation.ClientIdExchange, GetClientIdArguments(newClient), tokenSource.Token);
+                Task<bool> sendClientMainChat = newClient.UpdateClient(Operation.AddNewChat, GetMainChatArguments(), tokenSource.Token);
+                bool[] isBasicInformationSentSucessfully = await Task.WhenAll(sendClientId, sendClientMainChat);
+                foreach(bool status in isBasicInformationSentSucessfully)
+                {
+                    if (!status)
+                    {
+                        newClientConnection.Close();
+                    }
+                }
             }
+        }
+
+        private JsonObject GetClientIdArguments(ClientBase client)
+        {
+            JsonObject arguments = (JsonObject)JsonObject.Parse("{}");
+            arguments.Add("client_id", client.Id.ToString());
+            return arguments;
+        }
+
+        private JsonObject GetMainChatArguments()
+        {
+            JsonObject arguments = (JsonObject)JsonObject.Parse("{}");
+            arguments.Add("chat_id", _chatsUpdater.MainChatId.ToString());
+            JsonObject clientsJson = (JsonObject)JsonObject.Parse("{}");
+            IDictionary<Guid, string> clients = _chatsUpdater.GetChatClients(_chatsUpdater.MainChatId);
+            foreach (Guid id in clients.Keys)
+            {
+                clientsJson.Add(id.ToString(), clients[id]);
+            }
+            return arguments;
         }
 
     }

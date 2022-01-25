@@ -14,7 +14,7 @@ namespace Kashkeshet.ServerCore.Abstracts
     {
         public readonly Guid Id = Guid.NewGuid();
         protected TcpClient Client;
-        protected string Name;
+        public string Name { get; protected set; }
 
         private DataSerializer _serializer;
         private DataDeserializer _deserializer;
