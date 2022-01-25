@@ -4,6 +4,7 @@ using Kashkeshet.NetworkBll;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kashkeshet.ConsoleUI
@@ -29,11 +30,15 @@ namespace Kashkeshet.ConsoleUI
             updater.ChatMessageUpdate += ReceivedNewMessage;
         }
 
-        public async Task StartInputFlow()
+        public async Task StartInputFlow(CancellationToken token)
         {
-            string commandInput = GetCommandInput();
-            await _commandHandler.HandleNewCommand(commandInput);
-
+            token.ThrowIfCancellationRequested();
+            while (true)
+            {
+                token.ThrowIfCancellationRequested();
+                string commandInput = GetCommandInput();
+                await _commandHandler.HandleNewCommand(commandInput);
+            }
         }
 
         public void ReceivedNewMessage(Guid chatId, Message message)
