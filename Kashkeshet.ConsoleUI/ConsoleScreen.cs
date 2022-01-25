@@ -46,7 +46,7 @@ namespace Kashkeshet.ConsoleUI
 
         private string GetCommandInput()
         {
-            return Console.ReadLine():
+            return Console.ReadLine();
         }
 
     }
