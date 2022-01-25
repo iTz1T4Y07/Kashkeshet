@@ -13,6 +13,12 @@ namespace Kashkeshet.LogicBll.Abstracts
         protected IList<Message> Messages;
         protected IDictionary<Guid, string> Clients;
 
+        public ChatBase(Guid id, IList<Message> messages, IDictionary<Guid, string> clients)
+        {
+            Id = id;
+            Messages = messages;
+            Clients = clients;
+        }
         public virtual IList<Message> GetMessages() => Messages.Select(item => item).ToList();
 
         public virtual IDictionary<Guid, string> GetClients()

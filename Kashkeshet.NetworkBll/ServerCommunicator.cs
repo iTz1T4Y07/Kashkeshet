@@ -21,12 +21,12 @@ namespace Kashkeshet.NetworkBll
         private DataSerializer _serializer;
         private DataDeserializer _deserializer;
 
-        public ServerCommunicator(OperationHandler operationHandler, DataSerializer Serializer, DataDeserializer deserializer)
+        public ServerCommunicator(OperationHandler operationHandler, DataSerializer serializer, DataDeserializer deserializer)
         {
             UserId = Guid.Empty;
             _client = new TcpClient();
             _handler = operationHandler;
-            _serializer = Serializer;
+            _serializer = serializer;
             _deserializer = deserializer;
         }
 
