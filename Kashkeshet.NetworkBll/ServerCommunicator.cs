@@ -28,6 +28,7 @@ namespace Kashkeshet.NetworkBll
             _handler = operationHandler;
             _serializer = serializer;
             _deserializer = deserializer;
+            _handler.UpdateClientId += UpdateId;
         }
 
         public Task<bool> TryConnect(IPAddress ip, int port)
@@ -97,6 +98,11 @@ namespace Kashkeshet.NetworkBll
             receivedMessage[0] = messageType;
             messageBuffer.CopyTo(receivedMessage, 1);
             return receivedMessage;
+        }
+
+        private void UpdateId(Guid newId)
+        {
+            UserId = newId;
         }
     }
 }
