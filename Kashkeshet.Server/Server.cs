@@ -37,6 +37,7 @@ namespace Kashkeshet.Server
                 ClientBase newClient = new RegularClient(newClientConnection, serializer, deserializer, clientOrderHandler);
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
                 _clientTokens.Add(newClient, tokenSource);
+                _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, newClient);
                 _ = newClient.ReceiveNewOrder(tokenSource.Token);
             }
         }

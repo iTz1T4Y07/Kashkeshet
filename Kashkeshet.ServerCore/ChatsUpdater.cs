@@ -13,12 +13,12 @@ namespace Kashkeshet.ServerCore
 {
     public class ChatsUpdater
     {
-        public readonly Guid _mainChatId;
+        public readonly Guid MainChatId;
         private IDictionary<Guid, ChatBase> _chats;
 
         public ChatsUpdater(IList<ChatBase> chats)
         {
-            _mainChatId = chats.First().id;
+            MainChatId = chats.First().id;
             _chats = new Dictionary<Guid, ChatBase>();
             foreach (ChatBase chat in chats)
             {
