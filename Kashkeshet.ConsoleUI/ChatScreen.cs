@@ -4,40 +4,59 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using System.Text;
+using System.Threading.Tasks;
+using Kashkeshet.Common;
 
 namespace Kashkeshet.ConsoleUI
 {
     public class ChatScreen
     {
-        public readonly Guid Id;
-        protected ServerCommunicator _communicator;
+        public Guid Id;
+        protected ChatInformationExtractor _informationExtractor;
         protected ChatUpdater _updater;
-        protected Process _windowProcess;
-        protected StreamWriter _writer;
-        protected StreamReader _reader;
 
-        public ChatScreen(Guid chatId, ServerCommunicator communicator, ChatUpdater updater)
+        public ChatScreen(Guid chatId, ChatInformationExtractor informationExtractor, ChatUpdater updater)
         {
             Id = chatId;
-            _communicator = communicator;
-            _updater = updater;            
+            _informationExtractor = informationExtractor;
+            _updater = updater;
         }
 
-        public void Start()
+        public void Load()
         {
-            ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe")
-            {
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                FileName = $"Chat ID {Id}"
-            };
+            Console.Clear();
+            Console.WriteLine($"Chat #{Id}");
+            Console.WriteLine("---------------------------------");
+        }
 
-            _windowProcess = Process.Start(processStartInfo);
-            _writer = _windowProcess.StandardInput;
-            _reader = _windowProcess.StandardOutput;
+        public void PrintMessage(Message message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"{GetUserNameById(message.SenderId)}:");
+            Console.ResetColor();
+            Console.WriteLine(FormatMessage(message));
+        }
+
+        protected string FormatMessage(Message message)
+        {
+            switch (message.Type)
+            {
+                case MessageType.TextMessage:
+                    return Encoding.ASCII.GetString(message.MessageData);
+
+                default:
+                    return String.Empty;
+            }
+
+        }
+        private string GetUserNameById(Guid userId)
+        {
+            IDictionary<Guid, string> clients = _informationExtractor.GetClients(Id);
+            string userName = String.Empty;
+            clients.TryGetValue(userId, out userName);
+            return userName;
         }
     }
 }
