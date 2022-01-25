@@ -42,7 +42,7 @@ namespace Kashkeshet.ConsoleUI
             {
                 token.ThrowIfCancellationRequested();
                 string commandInput = GetCommandInput();
-                await _commandHandler.HandleNewCommand(commandInput);
+                await _commandHandler.HandleNewCommand(commandInput, token);
             }
         }
 
