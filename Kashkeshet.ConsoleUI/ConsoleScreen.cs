@@ -30,6 +30,11 @@ namespace Kashkeshet.ConsoleUI
             updater.ChatMessageUpdate += ReceivedNewMessage;
         }
 
+        public async Task Start(CancellationToken token)
+        {
+            _currentChat.Load();
+            await StartInputFlow(token);            
+        }
         public async Task StartInputFlow(CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
