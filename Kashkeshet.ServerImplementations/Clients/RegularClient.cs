@@ -18,10 +18,5 @@ namespace Kashkeshet.ServerImplementations.Clients
         {
             throw new NotImplementedException();
         }
-
-        protected override Task HandleNewOrder(byte[] data, CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
