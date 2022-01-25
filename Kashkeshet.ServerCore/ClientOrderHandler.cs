@@ -21,7 +21,7 @@ namespace Kashkeshet.ServerCore
                     return;
                 }
 
-                Guid chatId = arguments["chat_id"];
+                Guid chatId = Guid.Parse(arguments["chat_id"]);
                 Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);
                 await AddMessageToChat?.Invoke(chatId, message);
             }
