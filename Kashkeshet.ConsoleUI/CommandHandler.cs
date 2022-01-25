@@ -25,8 +25,7 @@ namespace Kashkeshet.ConsoleUI
         {
             Message newMessage = new Message(_communicator.UserId, MessageType.TextMessage, Encoding.ASCII.GetBytes(command));
             string messageJsonString = JsonSerializer.Serialize(newMessage, typeof(Message));
-            IEnumerable<KeyValuePair<string, JsonValue>> items = new List<KeyValuePair<string, JsonValue>>();
-            JsonObject arguments = new JsonObject(items);
+            JsonObject arguments = (JsonObject)JsonObject.Parse("{}");
             arguments.Add("chat_id", _currentChat.Id.ToString());
             arguments.Add("message", messageJsonString);
 

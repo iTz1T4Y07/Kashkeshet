@@ -7,6 +7,7 @@ namespace Kashkeshet.Common
     public enum Operation
     {
         SendMessage,
-        AddClientToChat
+        AddClientToChat,
+        ClientIdExchange
     }
 }

@@ -10,6 +10,8 @@ namespace Kashkeshet.NetworkBll
 {
     public class OperationHandler
     {
+        public event Action<Guid> UpdateClientId;
+
         private ChatUpdater _updater;
 
         public OperationHandler(ChatUpdater updater)
@@ -24,12 +26,15 @@ namespace Kashkeshet.NetworkBll
                 case Operation.SendMessage:
                     await SendMessage(arguments);
                     break;
+                case Operation.ClientIdExchange:
+                    UpdateId(arguments);
+                    break;
                 default:
                     break;
             }
         }
 
-        public async Task SendMessage(JsonObject arguments)
+        private async Task SendMessage(JsonObject arguments)
         {
             if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("message"))
             {
@@ -38,6 +43,15 @@ namespace Kashkeshet.NetworkBll
             Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);            
             await _updater.AddMessageToChat(message, Guid.Parse(arguments["chat_id"]));
 
+        }
+
+        private void UpdateId(JsonObject arguments)
+        {
+            if (!arguments.ContainsKey("client_id"))
+            {
+                return;
+            }
+            UpdateClientId?.Invoke(Guid.Parse(arguments["client_id"]));
         }
     }
 }
