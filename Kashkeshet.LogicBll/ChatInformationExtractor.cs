@@ -9,11 +9,11 @@ namespace Kashkeshet.LogicBll
 {
     public class ChatInformationExtractor
     {
-        private IDictionary<Guid, ChatBase> _chats;
+        private IDictionary<Guid, Chat> _chats;
 
         public ChatInformationExtractor()
         {
-            _chats = new Dictionary<Guid, ChatBase>();
+            _chats = new Dictionary<Guid, Chat>();
         }
 
         public IList<Message> GetMessages(Guid id)
@@ -34,7 +34,7 @@ namespace Kashkeshet.LogicBll
             return new Dictionary<Guid, string>();
         }
 
-        public void AddNewChat(ChatBase chat)
+        public void AddNewChat(Chat chat)
         {
             _chats.Add(chat.Id, chat);
         }

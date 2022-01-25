@@ -1,5 +1,6 @@
 ﻿using Kashkeshet.Common;
 using Kashkeshet.LogicBll;
+using Kashkeshet.LogicBll.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.Json;
@@ -29,6 +30,9 @@ namespace Kashkeshet.NetworkBll
                 case Operation.ClientIdExchange:
                     UpdateId(arguments);
                     break;
+                case Operation.AddNewChat:
+                    await AddNewChat(arguments);
+                    break;
                 default:
                     break;
             }
@@ -39,8 +43,8 @@ namespace Kashkeshet.NetworkBll
             if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("message"))
             {
                 return;
-            }            
-            Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);            
+            }
+            Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);
             await _updater.AddMessageToChat(message, Guid.Parse(arguments["chat_id"]));
 
         }
@@ -52,6 +56,25 @@ namespace Kashkeshet.NetworkBll
                 return;
             }
             UpdateClientId?.Invoke(Guid.Parse(arguments["client_id"]));
+        }
+
+        private async Task AddNewChat(JsonObject arguments)
+        {
+            if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("clients"))
+            {
+                return;
+            }
+
+            Guid chatId = Guid.Parse(arguments["chat_id"]);
+            IList<Message> messages = new List<Message>();
+            IDictionary<Guid, string> clients = new Dictionary<Guid, string>();
+            JsonObject clientsJson = (JsonObject)JsonObject.Parse(arguments["clients"]);
+            foreach (string jsonKey in clientsJson.Keys)
+            {
+                clients.Add(Guid.Parse(jsonKey), clientsJson[jsonKey]);
+            }
+
+            _updater.AddChat(new Chat(chatId, messages, clients));
         }
     }
 }

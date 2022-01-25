@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kashkeshet.LogicBll.Abstracts
+namespace Kashkeshet.LogicBll
 {
-    public abstract class ChatBase
+    public class Chat
     {
         public readonly Guid Id;
         protected IList<Message> Messages;
         protected IDictionary<Guid, string> Clients;
 
-        public ChatBase(Guid id, IList<Message> messages, IDictionary<Guid, string> clients)
+        public Chat(Guid id, IList<Message> messages, IDictionary<Guid, string> clients)
         {
             Id = id;
             Messages = messages;
