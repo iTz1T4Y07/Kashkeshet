@@ -55,6 +55,15 @@ namespace Kashkeshet.ServerCore
             return false;
         }
 
+        public IDictionary<Guid, string> GetChatClients(Guid chatId)
+        {
+            if (!_chats.ContainsKey(chatId))
+            {
+                return new Dictionary<Guid, string>();
+            }
+            return _chats[chatId].GetClients();
+        }
+
 
     }
 }
