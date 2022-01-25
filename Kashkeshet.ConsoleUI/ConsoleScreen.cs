@@ -29,9 +29,11 @@ namespace Kashkeshet.ConsoleUI
             updater.ChatMessageUpdate += ReceivedNewMessage;
         }
 
-        public Task WaitForNewCommand()
+        public async Task StartInputFlow()
         {
-            throw new NotImplementedException();
+            string commandInput = GetCommandInput();
+            await _commandHandler.HandleNewCommand(commandInput);
+
         }
 
         public void ReceivedNewMessage(Guid chatId, Message message)
@@ -40,6 +42,11 @@ namespace Kashkeshet.ConsoleUI
             {
                 _currentChat.PrintMessage(message);
             }
+        }
+
+        private string GetCommandInput()
+        {
+            return Console.ReadLine():
         }
 
     }
