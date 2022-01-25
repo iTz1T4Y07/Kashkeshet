@@ -9,8 +9,7 @@ namespace Kashkeshet.Common
     {
         public byte[] Deserialize(JsonObject objectToDeserialzie)
         {
-            //Todo: Implement;
-            return new byte[] { };
+            return Encoding.UTF8.GetBytes(objectToDeserialzie.ToString());
         }
     }
 }
