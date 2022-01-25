@@ -6,7 +6,9 @@ namespace Kashkeshet.Server
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Bootstrapper bootstrapper = new Bootstrapper();
+            Server server = bootstrapper.GetServer();
+            server.Start().GetAwaiter().GetResult();
         }
     }
 }
