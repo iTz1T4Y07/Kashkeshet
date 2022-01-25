@@ -12,20 +12,20 @@ namespace Kashkeshet.ServerCore.Abstracts
 {
     public abstract class ClientBase
     {
-        public event Action<
-
         public readonly Guid Id = Guid.NewGuid();
         protected TcpClient Client;
         protected string Name;
 
         private DataSerializer _serializer;
+        private DataDeserializer _deserializer;
         private ClientOrderHandler _orderHandler;
 
-        public ClientBase(TcpClient client, DataSerializer serializer, ClientOrderHandler orderHandler)
+        public ClientBase(TcpClient client, DataSerializer serializer, DataDeserializer deserializer, ClientOrderHandler orderHandler)
         {
             Client = client;
             Name = string.Empty;
             _serializer = serializer;
+            _deserializer = deserializer;
             _orderHandler = orderHandler;
         }
 
@@ -42,7 +42,18 @@ namespace Kashkeshet.ServerCore.Abstracts
             }
         }
 
-        public abstract Task<bool> UpdateClient(); // Sending updates to remote client via network
+        public virtual async Task<bool> UpdateClient(Operation operation, JsonObject operationArguments, CancellationToken token) // Sending updates to remote client via network
+        {
+            token.ThrowIfCancellationRequested();
+            NetworkStream stream = Client.GetStream();
+            if (stream.CanWrite)
+            {
+                await stream.WriteAsync(FormatNetworkMessage(operation, operationArguments));
+                return true;
+            }
+            return false;
+        }
+
         protected virtual async Task HandleNewOrder(byte[] data, CancellationToken token) // Handling new order
         {
             Operation operationReceived = Enum.Parse<Operation>(data[0].ToString());
@@ -63,6 +74,24 @@ namespace Kashkeshet.ServerCore.Abstracts
             receivedMessage[0] = messageType;
             messageBuffer.CopyTo(receivedMessage, 1);
             return receivedMessage;
+        }
+
+        protected byte[] FormatNetworkMessage(Operation requiredOperation, JsonObject arguments)
+        {
+            byte[] message = _deserializer.Deserialize(arguments);
+            byte[] length = BitConverter.GetBytes(message.Length);
+            byte[] buffer = new byte[sizeof(int) + message.Length + 1];
+            buffer[0] = ((byte)requiredOperation);
+            for (int i = 0; i < sizeof(int); i++)
+            {
+                buffer[i + 1] = length[i];
+            }
+
+            for (int i = 0; i < message.Length; i++)
+            {
+                buffer[i + 1 + sizeof(int)] = message[i];
+            }
+            return buffer;
         }
     }
 }

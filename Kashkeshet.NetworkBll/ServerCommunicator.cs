@@ -39,13 +39,13 @@ namespace Kashkeshet.NetworkBll
             });
         }
 
-        public async Task<bool> SendOperation(Operation requiredOperation, JsonObject OperationArguments, CancellationToken token)
+        public async Task<bool> SendOperation(Operation requiredOperation, JsonObject operationArguments, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             NetworkStream stream = _client.GetStream();
             if (stream.CanWrite)
             {                
-                await stream.WriteAsync(FormatNetworkMessage(requiredOperation, OperationArguments));
+                await stream.WriteAsync(FormatNetworkMessage(requiredOperation, operationArguments));
                 return true;
             }
             return false;
