@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using System.Json;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kashkeshet.ServerCore
 {
     public class ClientOrderHandler
     {
-        public event Func<Guid, Message, Task> AddMessageToChat; //ChatsUpdater needs to register
+        public event Func<Guid, Message, CancellationToken, Task> AddMessageToChat; //ChatsUpdater needs to register
 
-        public async Task HandleOperation(Operation operation, JsonObject arguments)
+        public async Task HandleOperation(Operation operation, JsonObject arguments, CancellationToken token)
         {
             if (operation == Operation.SendMessage)
             {
@@ -23,7 +24,7 @@ namespace Kashkeshet.ServerCore
 
                 Guid chatId = Guid.Parse(arguments["chat_id"]);
                 Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);
-                await AddMessageToChat?.Invoke(chatId, message);
+                await AddMessageToChat?.Invoke(chatId, message, token);
             }
         }
 

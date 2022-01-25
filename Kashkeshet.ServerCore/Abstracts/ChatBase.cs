@@ -34,6 +34,7 @@ namespace Kashkeshet.ServerCore.Abstracts
         {
             foreach(ClientBase client in ConnectedClients)
             {
+                await Task.Yield();
                 yield return client;
             }
         }
