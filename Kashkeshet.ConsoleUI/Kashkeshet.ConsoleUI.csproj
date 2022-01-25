@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,6 +7,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Kashkeshet.LogicBll\Kashkeshet.LogicBll.csproj" />
     <ProjectReference Include="..\Kashkeshet.NetworkBll\Kashkeshet.NetworkBll.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Kashkeshet.Common">
+      <HintPath>..\Kashkeshet.Common\bin\Debug\netcoreapp3.1\Kashkeshet.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

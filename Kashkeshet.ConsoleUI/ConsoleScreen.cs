@@ -28,9 +28,14 @@ namespace Kashkeshet.ConsoleUI
         }
 
         public Task WaitForNewCommand()
-        {            
-            string input = Console.ReadLine();
-            _commandHandler.HandleNewCommand(input);
+        {
+            throw new NotImplementedException();
         }
+
+        public Task ReceivedNewMessage()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
