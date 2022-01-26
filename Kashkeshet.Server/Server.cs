@@ -39,22 +39,28 @@ namespace Kashkeshet.Server
                 ClientBase newClient = new RegularClient(newClientConnection, serializer, deserializer, clientOrderHandler);
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
 
-                await Task.Run(() => RegisterNewClient(newClient, tokenSource));
-
-                if (!await SendBasicInformationToClient(newClient, tokenSource.Token))
+                bool isRegisterSuccessfully = await RegisterNewClient(newClient, tokenSource);
+                if (!isRegisterSuccessfully)
                 {
                     newClientConnection.Close();
                 }
+                else
+                {
+                    if (!await SendBasicInformationToClient(newClient, tokenSource.Token))
+                    {
+                        newClientConnection.Close();
+                    }
 
-                _ = Task.Run(() => newClient.ReceiveNewOrder(tokenSource.Token));
+                    _ = Task.Run(() => newClient.ReceiveNewOrder(tokenSource.Token));
+                }
             }
         }
 
-        private void RegisterNewClient(ClientBase client, CancellationTokenSource source)
+        private async Task<bool> RegisterNewClient(ClientBase client, CancellationTokenSource source)
         {
             client.UpdateClientDisconnect += HandleClientDisconnection;
             _clientTokens.Add(client, source);
-            _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, client);
+            return await _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, client);
         }
 
         private async Task<bool> SendBasicInformationToClient(ClientBase client, CancellationToken token)
