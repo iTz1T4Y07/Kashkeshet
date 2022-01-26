@@ -100,6 +100,15 @@ namespace Kashkeshet.ServerCore
             return _chats[chatId].GetClients();
         }
 
+        public IList<Message> GetChatMessages(Guid chatId)
+        {
+            if (!_chats.ContainsKey(chatId))
+            {
+                return new List<Message>();
+            }
+            return _chats[chatId].GetMessages();
+        }
+
 
     }
 }
