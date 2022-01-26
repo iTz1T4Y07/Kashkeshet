@@ -51,6 +51,7 @@ namespace Kashkeshet.Server
                         newClientConnection.Close();
                     }
                 }
+                _ = newClient.ReceiveNewOrder(tokenSource.Token);
             }
         }
 
@@ -71,6 +72,7 @@ namespace Kashkeshet.Server
             {
                 clientsJson.Add(id.ToString(), clients[id]);
             }
+            arguments.Add("clients", clientsJson);
             return arguments;
         }
 
