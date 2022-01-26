@@ -27,11 +27,7 @@ namespace Kashkeshet.ConsoleUI
         public async Task Start(CancellationToken token)
         {
             Guid chatId = await GetMainChatId();
-            _currentChat = new ChatScreen(chatId, _informationExtractor, _updater);
-            _commandHandler = new CommandHandler(_serverCommunicator, _currentChat);
-            _updater.ChatMessageUpdate += ReceivedNewMessage;
-            _updater.ChatClientsUpdate += ClientsListChanged;
-            _currentChat.Load();
+            InitializeData(chatId);
             await StartInputFlow(token);            
         }
 
@@ -50,6 +46,15 @@ namespace Kashkeshet.ConsoleUI
                 triesCounter++;
             }
             throw new OperationCanceledException("Found 0 chats available.");
+        }
+
+        private void InitializeData(Guid chatId)
+        {
+            _currentChat = new ChatScreen(chatId, _informationExtractor, _updater);
+            _commandHandler = new CommandHandler(_serverCommunicator, _currentChat);
+            _updater.ChatMessageUpdate += ReceivedNewMessage;
+            _updater.ChatClientsUpdate += ClientsListChanged;
+            _currentChat.Load();
         }
 
         private async Task StartInputFlow(CancellationToken token)
