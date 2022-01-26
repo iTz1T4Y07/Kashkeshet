@@ -69,7 +69,14 @@ namespace Kashkeshet.ConsoleUI
         {
             if (chatId == _currentChat.Id)
             {
-                _currentChat.NotifyClientJoined(clientId, _informationExtractor.GetClients(chatId)[clientId]);
+                if (_informationExtractor.GetClients(chatId).ContainsKey(clientId))
+                {
+                    _currentChat.NotifyClientJoined(clientId, _informationExtractor.GetClients(chatId)[clientId]);
+                }
+                else
+                {
+                    _currentChat.NotifyClientLeft(clientId);
+                }
             }
         }
 
