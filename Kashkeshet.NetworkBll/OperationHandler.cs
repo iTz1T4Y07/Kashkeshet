@@ -101,7 +101,14 @@ namespace Kashkeshet.NetworkBll
 
         private async Task RemoveClientFromChat(JsonObject arguments)
         {
+            if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("client_id"))
+            {
+                return;
+            }
 
+            Guid chatId = Guid.Parse(arguments["chat_id"]);
+            Guid clientId = Guid.Parse(arguments["client_id"]);
+            await _updater.RemoveClientFromChat(chatId, clientId);
         }
     }
 }
