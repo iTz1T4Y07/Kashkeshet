@@ -68,13 +68,13 @@ namespace Kashkeshet.NetworkBll
         {
             return Task.Run(() =>
             {
-                if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("clients"))
+                if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("message_list") || !arguments.ContainsKey("clients"))
                 {
                     return;
                 }
 
                 Guid chatId = Guid.Parse(arguments["chat_id"]);
-                IList<Message> messages = new List<Message>();
+                IList<Message> messages = JsonSerializer.Deserialize<IList<Message>>(arguments["message_list"]);
                 IDictionary<Guid, string> clients = new Dictionary<Guid, string>();
                 JsonObject clientsJson = (JsonObject)arguments["clients"];
                 foreach (string jsonKey in clientsJson.Keys)
