@@ -3,6 +3,7 @@ using Kashkeshet.LogicBll;
 using Kashkeshet.NetworkBll;
 using System;
 using System.Collections.Generic;
+using System.Json;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -56,6 +57,14 @@ namespace Kashkeshet.ConsoleUI
             _updater.ChatMessageUpdate += ReceivedNewMessage;
             _updater.ChatClientsUpdate += ClientsListChanged;
             _currentChat.Load();
+        }
+
+        private async Task InitializeUserName(CancellationToken token)
+        {
+            string userName = GetUserNameFromInput();
+            JsonObject operationInfo = (JsonObject)JsonObject.Parse("{}");
+            operationInfo.Add("client_name", userName);
+            await _serverCommunicator.SendOperation(Operation.DeclareClientName, operationInfo, token);
         }
 
         private string GetUserNameFromInput()
