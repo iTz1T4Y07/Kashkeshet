@@ -10,11 +10,11 @@ namespace Kashkeshet.LogicBll
     {
         public event Action<Chat> ChatListUpdate;
         public event Action<Guid, Message> ChatMessageUpdate;
-        public ref Guid UserId { get => ref UserId; }
+        public Guid UserId { get; set; }
 
         private IDictionary<Guid, Chat> _chats;
 
-        public ChatUpdater(ref Guid userId, IDictionary<Guid, Chat> chats)
+        public ChatUpdater(Guid userId, IDictionary<Guid, Chat> chats)
         {
             UserId = userId;
             _chats = chats;
