@@ -14,13 +14,13 @@ namespace Kashkeshet.ServerCore
         public event Func<Guid, Message, CancellationToken, Task> NewMessageArrived; //ChatsUpdater needs to register
         public event Action<string> ClientNameChanged;
 
-        public async Task HandleOperation(Operation operation, JsonObject arguments, CancellationToken token)
+        public async Task HandleOperation(Guid senderId, Operation operation, JsonObject arguments, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             switch (operation)
             {
                 case Operation.SendMessage:
-                    await AddMessageToChat(arguments, token);
+                    await AddMessageToChat(senderId, arguments, token);
                     break;
                 case Operation.DeclareClientName:
                     ChangeClientName(arguments, token);
@@ -30,7 +30,7 @@ namespace Kashkeshet.ServerCore
             }
         }
 
-        private async Task AddMessageToChat(JsonObject arguments, CancellationToken token)
+        private async Task AddMessageToChat(Guid senderId, JsonObject arguments, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("message"))
@@ -40,7 +40,10 @@ namespace Kashkeshet.ServerCore
 
             Guid chatId = Guid.Parse(arguments["chat_id"]);
             Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);
-            await NewMessageArrived?.Invoke(chatId, message, token);
+            if (message.SenderId == senderId)
+            {
+                await NewMessageArrived?.Invoke(chatId, message, token);
+            }
         }
 
         private void ChangeClientName(JsonObject arguments, CancellationToken token)
