@@ -26,6 +26,8 @@ namespace Kashkeshet.ServerCore.Abstracts
         public bool TryRemoveClient(ClientBase client) => ConnectedClients.Remove(client);
 
         public IDictionary<Guid, string> GetClients() => ConnectedClients.ToDictionary(client => client.Id, client => client.Name);
+
+        public IList<Message> GetMessages() => Messages.ToList();
        
         public virtual async Task UpdateAllClients(Operation operation, JsonObject arguments, CancellationToken token)
         {
