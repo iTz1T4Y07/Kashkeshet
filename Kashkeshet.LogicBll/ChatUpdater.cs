@@ -10,7 +10,7 @@ namespace Kashkeshet.LogicBll
     {
         public event Action<Chat> ChatListUpdate;
         public event Action<Guid, Message> ChatMessageUpdate;
-        public event Action<Guid, Guid> ChatClientsUpdate;
+        public event Action<Guid, Guid > ChatClientsUpdate;
         public Guid UserId { get; set; }
 
         private IDictionary<Guid, Chat> _chats;
@@ -40,7 +40,11 @@ namespace Kashkeshet.LogicBll
         {
             if (_chats.ContainsKey(chatId))
             {
-                return await _chats[chatId].AddClient(clientId, clientName);
+                if(await _chats[chatId].AddClient(clientId, clientName))
+                {
+                    ChatClientsUpdate?.Invoke(chatId, clientId);
+                    return true;
+                }
             }
             return false;
         }
