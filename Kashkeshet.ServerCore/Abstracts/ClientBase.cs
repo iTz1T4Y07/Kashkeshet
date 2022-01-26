@@ -29,6 +29,7 @@ namespace Kashkeshet.ServerCore.Abstracts
             _serializer = serializer;
             _deserializer = deserializer;
             _orderHandler = orderHandler;
+            _orderHandler.ClientNameChanged += (newName => Name = newName);
         }
 
         public async Task ReceiveNewOrder(CancellationToken token) // Receiving new orders from network
