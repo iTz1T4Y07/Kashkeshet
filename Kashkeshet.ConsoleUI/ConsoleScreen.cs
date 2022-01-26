@@ -64,6 +64,14 @@ namespace Kashkeshet.ConsoleUI
             }
         }
 
+        public void ClientsListChanged(Guid chatId, Guid clientId)
+        {
+            if (chatId == _currentChat.Id)
+            {
+                _currentChat.NotifyClientJoined(clientId, _informationExtractor.GetClients(chatId)[clientId]);
+            }
+        }
+
         private string GetCommandInput()
         {
             return Console.ReadLine();
