@@ -55,6 +55,23 @@ namespace Kashkeshet.ServerCore
             return false;
         }
 
+        public bool RemoveClientFromChat(Guid chatId, ClientBase client)
+        {
+            if (_chats.ContainsKey(chatId))
+            {
+                return _chats[chatId].TryRemoveClient(client);
+            }
+            return false;
+        }
+
+        public void RemoveCLientFromAllChats(ClientBase client)
+        {
+            foreach(Guid chatId in _chats.Keys)
+            {
+                RemoveClientFromChat(chatId, client);
+            }
+        }
+
         public IDictionary<Guid, string> GetChatClients(Guid chatId)
         {
             if (!_chats.ContainsKey(chatId))
