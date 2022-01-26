@@ -63,20 +63,29 @@ namespace Kashkeshet.ServerCore
             return false;
         }
 
-        public bool RemoveClientFromChat(Guid chatId, ClientBase client)
+        public async Task<bool> RemoveClientFromChat(Guid chatId, ClientBase client, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             if (_chats.ContainsKey(chatId))
             {
-                return _chats[chatId].TryRemoveClient(client);
+                if (_chats[chatId].TryRemoveClient(client))
+                {
+                    JsonObject operationInfo = (JsonObject)JsonObject.Parse("{}");
+                    operationInfo.Add("chat_id", chatId.ToString());
+                    operationInfo.Add("client_id", client.Id.ToString());
+                    await _chats[chatId].UpdateAllClients(Operation.RemoveClientFromChat, operationInfo, token);
+                    return true;
+                }
             }
             return false;
         }
 
-        public void RemoveClientFromAllChats(ClientBase client)
+        public async Task RemoveClientFromAllChats(ClientBase client, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             foreach (Guid chatId in _chats.Keys)
             {
-                RemoveClientFromChat(chatId, client);
+                await RemoveClientFromChat(chatId, client, token);
             }
         }
 
