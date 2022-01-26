@@ -39,6 +39,12 @@ namespace Kashkeshet.ConsoleUI
             Console.WriteLine(FormatMessage(message));
         }
 
+        public void NotifyClientJoined(Guid clientId, string name)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"User [{clientId}] aka [{name}] has joined the chat");
+        }
+
         protected string FormatMessage(Message message)
         {
             switch (message.Type)
