@@ -46,6 +46,13 @@ namespace Kashkeshet.ConsoleUI
             Console.ResetColor();
         }
 
+        public void NotifyClientLeft(Guid clientId)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"User [{clientId}] has left the chat");
+            Console.ResetColor();
+        }
+
         protected string FormatMessage(Message message)
         {
             switch (message.Type)
