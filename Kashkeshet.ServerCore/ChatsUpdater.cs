@@ -28,7 +28,7 @@ namespace Kashkeshet.ServerCore
 
         public void InitializeUpdater(ClientOrderHandler orderHandler)
         {
-            orderHandler.AddMessageToChat += AddMessageToChat;
+            orderHandler.NewMessageArrived += AddMessageToChat;
         }
 
         public async Task AddMessageToChat(Guid chatId, Message message, CancellationToken token)

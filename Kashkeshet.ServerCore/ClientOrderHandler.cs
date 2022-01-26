@@ -11,22 +11,30 @@ namespace Kashkeshet.ServerCore
 {
     public class ClientOrderHandler
     {
-        public event Func<Guid, Message, CancellationToken, Task> AddMessageToChat; //ChatsUpdater needs to register
+        public event Func<Guid, Message, CancellationToken, Task> NewMessageArrived; //ChatsUpdater needs to register
 
         public async Task HandleOperation(Operation operation, JsonObject arguments, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
-            if (operation == Operation.SendMessage)
+            switch (operation)
             {
-                if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("message"))
-                {
-                    return;
-                }
-
-                Guid chatId = Guid.Parse(arguments["chat_id"]);
-                Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);
-                await AddMessageToChat?.Invoke(chatId, message, token);
+                case Operation.SendMessage:
+                    await AddMessageToChat(arguments, token);
+                    break;
             }
+        }
+
+        private async Task AddMessageToChat(JsonObject arguments, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("message"))
+            {
+                return;
+            }
+
+            Guid chatId = Guid.Parse(arguments["chat_id"]);
+            Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);
+            await NewMessageArrived?.Invoke(chatId, message, token);
         }
 
     }
