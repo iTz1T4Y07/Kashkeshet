@@ -1,6 +1,7 @@
 ﻿using Kashkeshet.Common;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Json;
 using System.Linq;
 using System.Net.Sockets;
@@ -12,6 +13,7 @@ namespace Kashkeshet.ServerCore.Abstracts
 {
     public abstract class ClientBase
     {
+        public event EventHandler UpdateClientDisconnect;
         public readonly Guid Id = Guid.NewGuid();
         protected TcpClient Client;
         public string Name { get; protected set; }
@@ -33,20 +35,28 @@ namespace Kashkeshet.ServerCore.Abstracts
         {
             token.ThrowIfCancellationRequested();
             NetworkStream stream = Client.GetStream();
-            while (stream.CanRead)
+            while (Client.Connected && stream.CanRead)
             {
                 token.ThrowIfCancellationRequested();
-                byte[] receivedData = await ReadNewMessage(stream, token);
-                token.ThrowIfCancellationRequested();
-                await HandleNewOrder(receivedData, token);
-            }
+                try
+                {
+                    byte[] receivedData = await ReadNewMessage(stream, token);
+                    token.ThrowIfCancellationRequested();
+                    await HandleNewOrder(receivedData, token);
+                }
+                catch (IOException e)
+                {
+                    Client.Close();
+                    UpdateClientDisconnect?.Invoke(this, EventArgs.Empty);
+                }
+            }            
         }
 
         public virtual async Task<bool> UpdateClient(Operation operation, JsonObject operationArguments, CancellationToken token) // Sending updates to remote client via network
         {
             token.ThrowIfCancellationRequested();
             NetworkStream stream = Client.GetStream();
-            if (stream.CanWrite)
+            if (Client.Connected && stream.CanWrite)
             {
                 await stream.WriteAsync(FormatNetworkMessage(operation, operationArguments));
                 return true;
