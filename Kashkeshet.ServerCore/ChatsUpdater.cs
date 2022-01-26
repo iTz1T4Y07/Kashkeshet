@@ -64,7 +64,7 @@ namespace Kashkeshet.ServerCore
             return false;
         }
 
-        public void RemoveCLientFromAllChats(ClientBase client)
+        public void RemoveClientFromAllChats(ClientBase client)
         {
             foreach(Guid chatId in _chats.Keys)
             {
