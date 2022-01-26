@@ -13,7 +13,7 @@ namespace Kashkeshet.ConsoleUI
 {
     public class ChatScreen
     {
-        public Guid Id;
+        public Guid Id { get; set; }
         protected ChatInformationExtractor _informationExtractor;
         protected ChatUpdater _updater;
 
@@ -29,6 +29,10 @@ namespace Kashkeshet.ConsoleUI
             Console.Clear();
             Console.WriteLine($"Chat #{Id}");
             Console.WriteLine("---------------------------------");
+            foreach(Message message in _informationExtractor.GetMessages(Id))
+            {
+                PrintMessage(message);
+            }
         }
 
         public void PrintMessage(Message message)
