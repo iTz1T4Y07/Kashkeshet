@@ -10,6 +10,7 @@ namespace Kashkeshet.LogicBll
     {
         public event Action<Chat> ChatListUpdate;
         public event Action<Guid, Message> ChatMessageUpdate;
+        public event Action<Guid, Guid> ChatClientsUpdate;
         public Guid UserId { get; set; }
 
         private IDictionary<Guid, Chat> _chats;
