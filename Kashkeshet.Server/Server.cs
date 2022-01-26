@@ -39,14 +39,14 @@ namespace Kashkeshet.Server
                 ClientBase newClient = new RegularClient(newClientConnection, serializer, deserializer, clientOrderHandler);
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
 
-                bool isRegisterSuccessfully = await RegisterNewClient(newClient, tokenSource);
-                if (!isRegisterSuccessfully)
+                bool isConnectionCreatedSucessfuly = await SendBasicInformationToClient(newClient, tokenSource.Token);
+                if (!isConnectionCreatedSucessfuly)
                 {
                     newClientConnection.Close();
                 }
                 else
                 {
-                    if (!await SendBasicInformationToClient(newClient, tokenSource.Token))
+                    if (!await RegisterNewClient(newClient, tokenSource))
                     {
                         newClientConnection.Close();
                     }
