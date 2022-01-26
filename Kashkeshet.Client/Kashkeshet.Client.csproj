@@ -12,5 +12,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Kashkeshet.ConsoleUI\Kashkeshet.ConsoleUI.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Kashkeshet.Common">
+      <HintPath>..\Kashkeshet.Common\bin\Debug\netcoreapp3.1\Kashkeshet.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   
 </Project>

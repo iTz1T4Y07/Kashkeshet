@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Kashkeshet.ConsoleUI;
+using Kashkeshet.NetworkBll;
+using System;
 using System.Collections.Generic;
 using System.Json;
+using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace Kashkeshet.Client
 {
@@ -9,7 +13,17 @@ namespace Kashkeshet.Client
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Bootstrapper bootstrapper = new Bootstrapper();
+
+            ServerCommunicator serverCommunicator = bootstrapper.GetServerCommunicator();
+            ConsoleScreen consoleScreen = bootstrapper.GetConsoleScreen();
+            if (serverCommunicator.TryConnect(IPAddress.Loopback, 9090).GetAwaiter().GetResult())
+            {
+                CancellationTokenSource tokenSource = new CancellationTokenSource();
+                serverCommunicator.WaitForIncomingUpdates(tokenSource.Token);
+                consoleScreen.Start(tokenSource.Token).GetAwaiter().GetResult();
+            }
+
         }
     }
 }
