@@ -12,6 +12,7 @@ namespace Kashkeshet.ConsoleUI
     public class ConsoleScreen
     {
         private ChatScreen _currentChat;
+        private ChatUpdater _updater;
         private ChatInformationExtractor _informationExtractor;
         private ServerCommunicator _serverCommunicator;
         private CommandHandler _commandHandler;
@@ -20,18 +21,19 @@ namespace Kashkeshet.ConsoleUI
         {
             _informationExtractor = informationExtractor;
             _serverCommunicator = communicator;
-            Guid chatId = informationExtractor.GetMainChatId();
-            if (chatId == Guid.Empty)
-            {
-                throw new OperationCanceledException("Found 0 chats available.");
-            }
-            _currentChat = new ChatScreen(chatId, informationExtractor, updater);
-           _commandHandler = new CommandHandler(_serverCommunicator, _currentChat);
-            updater.ChatMessageUpdate += ReceivedNewMessage;
+            _updater = updater;
         }
 
         public async Task Start(CancellationToken token)
         {
+            Guid chatId = _informationExtractor.GetMainChatId();
+            if (chatId == Guid.Empty)
+            {
+                throw new OperationCanceledException("Found 0 chats available.");
+            }
+            _currentChat = new ChatScreen(chatId, _informationExtractor, _updater);
+            _commandHandler = new CommandHandler(_serverCommunicator, _currentChat);
+            _updater.ChatMessageUpdate += ReceivedNewMessage;
             _currentChat.Load();
             await StartInputFlow(token);            
         }
