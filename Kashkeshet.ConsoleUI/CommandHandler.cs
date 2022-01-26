@@ -24,7 +24,7 @@ namespace Kashkeshet.ConsoleUI
         public async Task HandleNewCommand(string command, CancellationToken token)
         {
             Message newMessage = new Message(_communicator.UserId, MessageType.TextMessage, Encoding.ASCII.GetBytes(command));
-            string messageJsonString = JsonSerializer.Serialize(newMessage, typeof(Message));
+            string messageJsonString = JsonSerializer.Serialize(newMessage);
             JsonObject arguments = (JsonObject)JsonObject.Parse("{}");
             arguments.Add("chat_id", _currentChat.Id.ToString());
             arguments.Add("message", messageJsonString);
