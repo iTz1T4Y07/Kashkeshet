@@ -40,14 +40,17 @@ namespace Kashkeshet.ConsoleUI
             int triesCounter = 0;
             while (chatId == Guid.Empty && triesCounter < 3)
             {
-                if (chatId != Guid.Empty)
-                {
-                    return chatId;
-                }
+                
                 await Task.Delay(1000);
                 chatId = _informationExtractor.GetMainChatId();
                 triesCounter++;
             }
+
+            if (chatId != Guid.Empty)
+            {
+                return chatId;
+            }
+
             throw new OperationCanceledException("Found 0 chats available.");
         }
 
