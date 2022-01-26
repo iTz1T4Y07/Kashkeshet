@@ -53,10 +53,11 @@ namespace Kashkeshet.ServerCore
             {
                 if (_chats[chatId].TryAddClient(client))
                 {
-                    JsonObject clientInfo = (JsonObject)JsonObject.Parse("{}");
-                    clientInfo.Add("client_id", client.Id.ToString());
-                    clientInfo.Add("client_name", client.Name);
-                    await _chats[chatId].UpdateAllClients(Operation.AddClientToChat, clientInfo, token);
+                    JsonObject operationInfo = (JsonObject)JsonObject.Parse("{}");
+                    operationInfo.Add("chat_id", chatId.ToString());
+                    operationInfo.Add("client_id", client.Id.ToString());
+                    operationInfo.Add("client_name", client.Name);
+                    await _chats[chatId].UpdateAllClients(Operation.AddClientToChat, operationInfo, token);
                     return true;
                 }
             }
