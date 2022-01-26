@@ -14,7 +14,7 @@ namespace Kashkeshet.NetworkBll
 {
     public class ServerCommunicator
     {
-        public ref Guid UserId { get=> ref UserId; }
+        public Guid UserId { get; private set; }
 
         private OperationHandler _handler;
         private TcpClient _client;
@@ -34,7 +34,7 @@ namespace Kashkeshet.NetworkBll
         public Task<bool> TryConnect(IPAddress ip, int port)
         {
             return Task.Run(() =>
-            {
+            {                
                 _client.Connect(ip, port);
                 return _client.Connected;
             });
