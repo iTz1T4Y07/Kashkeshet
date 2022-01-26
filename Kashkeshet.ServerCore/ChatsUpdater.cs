@@ -46,8 +46,9 @@ namespace Kashkeshet.ServerCore
 
         }
 
-        public async Task<bool> AddClientToChat(Guid chatId, ClientBase client)
+        public async Task<bool> AddClientToChat(Guid chatId, ClientBase client, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             if (_chats.ContainsKey(chatId))
             {
                 if (_chats[chatId].TryAddClient(client))
@@ -55,7 +56,7 @@ namespace Kashkeshet.ServerCore
                     JsonObject clientInfo = (JsonObject)JsonObject.Parse("{}");
                     clientInfo.Add("client_id", client.Id.ToString());
                     clientInfo.Add("client_name", client.Name);
-                    await _chats[chatId].UpdateAllClients(Operation.AddClientToChat, , clientInfo, null);
+                    await _chats[chatId].UpdateAllClients(Operation.AddClientToChat, clientInfo, token);
                     return true;
                 }
             }

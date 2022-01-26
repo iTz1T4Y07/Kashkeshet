@@ -60,11 +60,12 @@ namespace Kashkeshet.Server
         {
             client.UpdateClientDisconnect += HandleClientDisconnection;
             _clientTokens.Add(client, source);
-            return await _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, client);
+            return await _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, client, source.Token);
         }
 
         private async Task<bool> SendBasicInformationToClient(ClientBase client, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             Task<bool> sendClientId = client.UpdateClient(Operation.ClientIdExchange, GetClientIdArguments(client), token);
             Task<bool> sendClientMainChat = client.UpdateClient(Operation.AddNewChat, GetMainChatArguments(), token);
             bool[] isBasicInformationSentSucessfully = await Task.WhenAll(sendClientId, sendClientMainChat);
