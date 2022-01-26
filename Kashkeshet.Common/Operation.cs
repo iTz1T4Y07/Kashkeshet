@@ -10,6 +10,7 @@ namespace Kashkeshet.Common
         AddClientToChat,
         RemoveClientFromChat,
         ClientIdExchange,
-        AddNewChat
+        AddNewChat,
+        DeclareClientName
     }
 }
