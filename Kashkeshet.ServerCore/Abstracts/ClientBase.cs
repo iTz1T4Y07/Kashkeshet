@@ -81,7 +81,7 @@ namespace Kashkeshet.ServerCore.Abstracts
         {
             Operation operationReceived = Enum.Parse<Operation>(data[0].ToString());
             JsonObject argumentsReceived = _serializer.Serialize(data.TakeLast(data.Length - 1).ToArray());
-            await _orderHandler.HandleOperation(operationReceived, argumentsReceived, token);
+            await _orderHandler.HandleOperation(Id, operationReceived, argumentsReceived, token);
         }
 
         protected async Task<byte[]> ReadNewMessage(NetworkStream stream, CancellationToken token)
