@@ -53,7 +53,11 @@ namespace Kashkeshet.LogicBll
         {
             if (_chats.ContainsKey(chatId))
             {
-                return await _chats[chatId].RemoveClient(clientId);
+                if(await _chats[chatId].RemoveClient(clientId))
+                {
+                    ChatClientsUpdate.Invoke(chatId, clientId);
+                    return true;
+                }
             }
             return false;
         }
