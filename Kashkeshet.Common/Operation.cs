@@ -8,6 +8,7 @@ namespace Kashkeshet.Common
     {
         SendMessage,
         AddClientToChat,
+        RemoveClientFromChat,
         ClientIdExchange,
         AddNewChat
     }
