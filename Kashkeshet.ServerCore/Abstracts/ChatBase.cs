@@ -35,6 +35,11 @@ namespace Kashkeshet.ServerCore.Abstracts
             }
         }
 
+        public void AddMessage(Message message)
+        {
+            Messages.Add(message);
+        }
+
         private async IAsyncEnumerable<ClientBase> GetClientsAsync()
         {
             foreach(ClientBase client in ConnectedClients)
