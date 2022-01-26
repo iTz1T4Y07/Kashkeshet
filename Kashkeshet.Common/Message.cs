@@ -9,6 +9,7 @@ namespace Kashkeshet.Common
     public class Message
     {
         public Guid SenderId { get; }  
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public MessageType Type { get; }
         public byte[] MessageData { get; }
 
