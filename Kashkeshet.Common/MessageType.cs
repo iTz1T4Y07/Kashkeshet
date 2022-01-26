@@ -6,7 +6,6 @@ namespace Kashkeshet.Common
 {
     public enum MessageType
     {
-        TextMessage,
-        ClientUpdateMessage
+        TextMessage
     }
 }
