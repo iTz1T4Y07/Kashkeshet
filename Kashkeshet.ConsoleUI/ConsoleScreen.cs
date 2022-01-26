@@ -18,12 +18,14 @@ namespace Kashkeshet.ConsoleUI
         private ChatInformationExtractor _informationExtractor;
         private ServerCommunicator _serverCommunicator;
         private CommandHandler _commandHandler;
+        private bool _isChatLoaded;
 
         public ConsoleScreen(ChatInformationExtractor informationExtractor, ServerCommunicator communicator, ChatUpdater updater)
         {
             _informationExtractor = informationExtractor;
             _serverCommunicator = communicator;
             _updater = updater;
+            _isChatLoaded = false;
         }
 
         public async Task Start(CancellationToken token)
@@ -61,6 +63,7 @@ namespace Kashkeshet.ConsoleUI
             _updater.ChatMessageUpdate += ReceivedNewMessage;
             _updater.ChatClientsUpdate += ClientsListChanged;
             _currentChat.Load();
+            _isChatLoaded = true;
         }
 
         private async Task InitializeUserName(CancellationToken token)
@@ -111,6 +114,10 @@ namespace Kashkeshet.ConsoleUI
             {
                 if (_informationExtractor.GetClients(chatId).ContainsKey(clientId))
                 {
+                    while (!_isChatLoaded)
+                    {
+                        Task.Delay(500);
+                    }
                     _currentChat.NotifyClientJoined(clientId, _informationExtractor.GetClients(chatId)[clientId]);
                 }
                 else
