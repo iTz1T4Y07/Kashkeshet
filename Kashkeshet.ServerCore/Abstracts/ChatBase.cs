@@ -13,10 +13,12 @@ namespace Kashkeshet.ServerCore.Abstracts
     {
         public readonly Guid id = Guid.NewGuid();
         protected ISet<ClientBase> ConnectedClients;
+        protected IList<Message> Messages;
 
         public ChatBase(ISet<ClientBase> clients)
         {
             ConnectedClients = clients;
+            Messages = new List<Message>();
         }
 
         public bool TryAddClient(ClientBase client) => ConnectedClients.Add(client);
