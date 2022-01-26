@@ -16,7 +16,7 @@ namespace Kashkeshet.Client
         {
             Guid defaultGuid = Guid.Empty;
 
-            ChatUpdater updater = new ChatUpdater(ref defaultGuid, new Dictionary<Guid, Chat>());
+            ChatUpdater updater = new ChatUpdater(defaultGuid, new Dictionary<Guid, Chat>());
             OperationHandler operationHandler = new OperationHandler(updater);
             ServerCommunicator serverCommunicator = new ServerCommunicator(defaultGuid, operationHandler, new DataSerializer(), new DataDeserializer());
 
