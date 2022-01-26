@@ -29,7 +29,10 @@ namespace Kashkeshet.ServerCore.Abstracts
             _serializer = serializer;
             _deserializer = deserializer;
             _orderHandler = orderHandler;
-            _orderHandler.ClientNameChanged += (newName => Name = newName);
+            _orderHandler.ClientNameChanged += ((Guid senderId, string newName) =>
+            {
+                if (senderId == Id) Name = newName;                    
+            }); ;
         }
 
         public async Task ListenForNewOrders(CancellationToken token) // Receiving new orders from network
@@ -39,7 +42,7 @@ namespace Kashkeshet.ServerCore.Abstracts
             while (Client.Connected && stream.CanRead)
             {
                 await ReceiveOneOrder(token);
-            }            
+            }
         }
 
         public async Task<bool> ReceiveOneOrder(CancellationToken token)
