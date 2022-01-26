@@ -32,6 +32,9 @@ namespace Kashkeshet.NetworkBll
                 case Operation.AddNewChat:
                     await AddNewChat(arguments);
                     break;
+                case Operation.AddClientToChat:
+                    await AddClientToChat(arguments);
+                    break;
                 default:
                     break;
             }
@@ -78,6 +81,19 @@ namespace Kashkeshet.NetworkBll
 
                 _updater.AddChat(new Chat(chatId, messages, clients));
             });
+        }
+
+        private async Task AddClientToChat(JsonObject arguments)
+        {
+            if (!arguments.ContainsKey("chat_id") || !arguments.ContainsKey("client_id") || !arguments.ContainsKey("client_name"))
+            {
+                return;
+            }
+
+            Guid chatId = Guid.Parse(arguments["chat_id"]);
+            Guid clientId = Guid.Parse(arguments["client_id"]);
+            string clientName = arguments["client_name"];
+            await _updater.AddClientToChat(chatId, clientId, clientName);
         }
     }
 }
