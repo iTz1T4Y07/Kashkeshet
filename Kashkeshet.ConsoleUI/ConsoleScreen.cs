@@ -42,6 +42,7 @@ namespace Kashkeshet.ConsoleUI
             _currentChat = new ChatScreen(chatId, _informationExtractor, _updater);
             _commandHandler = new CommandHandler(_serverCommunicator, _currentChat);
             _updater.ChatMessageUpdate += ReceivedNewMessage;
+            _updater.ChatClientsUpdate += ClientsListChanged;
             _currentChat.Load();
             await StartInputFlow(token);            
         }
