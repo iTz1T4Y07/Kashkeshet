@@ -35,6 +35,9 @@ namespace Kashkeshet.NetworkBll
                 case Operation.AddClientToChat:
                     await AddClientToChat(arguments);
                     break;
+                case Operation.RemoveClientFromChat:
+                    await RemoveClientFromChat(arguments);
+                    break;
                 default:
                     break;
             }
@@ -94,6 +97,11 @@ namespace Kashkeshet.NetworkBll
             Guid clientId = Guid.Parse(arguments["client_id"]);
             string clientName = arguments["client_name"];
             await _updater.AddClientToChat(chatId, clientId, clientName);
+        }
+
+        private async Task RemoveClientFromChat(JsonObject arguments)
+        {
+
         }
     }
 }
