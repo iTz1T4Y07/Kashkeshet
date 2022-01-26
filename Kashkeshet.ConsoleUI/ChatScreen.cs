@@ -37,10 +37,14 @@ namespace Kashkeshet.ConsoleUI
 
         public void PrintMessage(Message message)
         {
+            int currentCursorPosition = Console.CursorLeft;
+            Console.MoveBufferArea(0, Console.CursorTop, currentCursorPosition, 1, 0, Console.CursorTop + 1);
+            Console.SetCursorPosition(0, Console.CursorTop);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write($"{GetUserNameById(message.SenderId)}:");
             Console.ResetColor();
             Console.WriteLine(FormatMessage(message));
+            Console.SetCursorPosition(currentCursorPosition, Console.CursorTop);
         }
 
         public void NotifyClientJoined(Guid clientId, string name)
