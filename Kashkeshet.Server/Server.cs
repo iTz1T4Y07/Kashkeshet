@@ -37,23 +37,39 @@ namespace Kashkeshet.Server
             {
                 TcpClient newClientConnection = await _listener.AcceptTcpClientAsync();
                 ClientBase newClient = new RegularClient(newClientConnection, serializer, deserializer, clientOrderHandler);
-                newClient.UpdateClientDisconnect += HandleClientDisconnection;
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
-                _clientTokens.Add(newClient, tokenSource);
-                _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, newClient);
 
-                Task<bool> sendClientId = newClient.UpdateClient(Operation.ClientIdExchange, GetClientIdArguments(newClient), tokenSource.Token);
-                Task<bool> sendClientMainChat = newClient.UpdateClient(Operation.AddNewChat, GetMainChatArguments(), tokenSource.Token);
-                bool[] isBasicInformationSentSucessfully = await Task.WhenAll(sendClientId, sendClientMainChat);
-                foreach(bool status in isBasicInformationSentSucessfully)
+                await Task.Run(() => RegisterNewClient(newClient, tokenSource));
+
+                if (!await SendBasicInformationToClient(newClient, tokenSource.Token))
                 {
-                    if (!status)
-                    {
-                        newClientConnection.Close();
-                    }
+                    newClientConnection.Close();
                 }
-                _ = newClient.ReceiveNewOrder(tokenSource.Token);
+
+                _ = Task.Run(() => newClient.ReceiveNewOrder(tokenSource.Token));
             }
+        }
+
+        private void RegisterNewClient(ClientBase client, CancellationTokenSource source)
+        {
+            client.UpdateClientDisconnect += HandleClientDisconnection;
+            _clientTokens.Add(client, source);
+            _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, client);
+        }
+
+        private async Task<bool> SendBasicInformationToClient(ClientBase client, CancellationToken token)
+        {
+            Task<bool> sendClientId = client.UpdateClient(Operation.ClientIdExchange, GetClientIdArguments(client), token);
+            Task<bool> sendClientMainChat = client.UpdateClient(Operation.AddNewChat, GetMainChatArguments(), token);
+            bool[] isBasicInformationSentSucessfully = await Task.WhenAll(sendClientId, sendClientMainChat);
+            foreach (bool status in isBasicInformationSentSucessfully)
+            {
+                if (!status)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private void HandleClientDisconnection(object Sender, EventArgs args)
