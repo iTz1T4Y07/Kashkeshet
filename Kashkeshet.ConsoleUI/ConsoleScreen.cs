@@ -27,6 +27,14 @@ namespace Kashkeshet.ConsoleUI
         public async Task Start(CancellationToken token)
         {
             Guid chatId = _informationExtractor.GetMainChatId();
+            int triesCounter = 0;
+            do
+            {
+                await Task.Delay(1000);
+                chatId = _informationExtractor.GetMainChatId();
+                triesCounter++;
+            }
+            while (chatId == Guid.Empty && triesCounter < 3);
             if (chatId == Guid.Empty)
             {
                 throw new OperationCanceledException("Found 0 chats available.");

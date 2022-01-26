@@ -20,7 +20,7 @@ namespace Kashkeshet.Client
             if (serverCommunicator.TryConnect(IPAddress.Loopback, 9090).GetAwaiter().GetResult())
             {
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
-                serverCommunicator.WaitForIncomingUpdates(tokenSource.Token);
+                _ = serverCommunicator.WaitForIncomingUpdates(tokenSource.Token);
                 consoleScreen.Start(tokenSource.Token).GetAwaiter().GetResult();
             }
 
