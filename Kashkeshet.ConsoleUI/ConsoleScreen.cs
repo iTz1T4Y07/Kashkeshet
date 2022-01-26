@@ -3,6 +3,7 @@ using Kashkeshet.LogicBll;
 using Kashkeshet.NetworkBll;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,6 +56,21 @@ namespace Kashkeshet.ConsoleUI
             _updater.ChatMessageUpdate += ReceivedNewMessage;
             _updater.ChatClientsUpdate += ClientsListChanged;
             _currentChat.Load();
+        }
+
+        private string GetUserNameFromInput()
+        {
+            string userName = string.Empty;
+            HashSet<char> usedChars = userName.ToHashSet();
+            while (userName == string.Empty || usedChars.Count < 1)
+            {
+                Console.WriteLine("Please enter your name");
+                Console.WriteLine("Your name must contains characters other than space");
+                userName = Console.ReadLine();
+                usedChars = userName.ToHashSet();
+                usedChars.Remove(' ');
+            }
+            return userName;
         }
 
         private async Task StartInputFlow(CancellationToken token)
