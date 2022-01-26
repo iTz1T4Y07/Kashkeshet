@@ -43,6 +43,7 @@ namespace Kashkeshet.ConsoleUI
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"User [{clientId}] aka [{name}] has joined the chat");
+            Console.ResetColor();
         }
 
         protected string FormatMessage(Message message)
