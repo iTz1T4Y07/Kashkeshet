@@ -46,11 +46,18 @@ namespace Kashkeshet.ServerCore
 
         }
 
-        public bool AddClientToChat(Guid chatId, ClientBase client)
+        public async Task<bool> AddClientToChat(Guid chatId, ClientBase client)
         {
             if (_chats.ContainsKey(chatId))
             {
-                return _chats[chatId].TryAddClient(client);
+                if (_chats[chatId].TryAddClient(client))
+                {
+                    JsonObject clientInfo = (JsonObject)JsonObject.Parse("{}");
+                    clientInfo.Add("client_id", client.Id.ToString());
+                    clientInfo.Add("client_name", client.Name);
+                    await _chats[chatId].UpdateAllClients(Operation.AddClientToChat, , clientInfo, null);
+                    return true;
+                }
             }
             return false;
         }
@@ -66,7 +73,7 @@ namespace Kashkeshet.ServerCore
 
         public void RemoveClientFromAllChats(ClientBase client)
         {
-            foreach(Guid chatId in _chats.Keys)
+            foreach (Guid chatId in _chats.Keys)
             {
                 RemoveClientFromChat(chatId, client);
             }
