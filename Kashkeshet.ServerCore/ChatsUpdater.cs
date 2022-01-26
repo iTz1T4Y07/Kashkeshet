@@ -38,6 +38,7 @@ namespace Kashkeshet.ServerCore
             {
                 return;
             }
+            _chats[chatId].AddMessage(message);
             IEnumerable<KeyValuePair<string, JsonValue>> items = new List<KeyValuePair<string, JsonValue>>();
             JsonObject arguments = new JsonObject(items);
             arguments.Add("chat_id", chatId.ToString());
