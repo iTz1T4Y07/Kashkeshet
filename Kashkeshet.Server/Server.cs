@@ -8,6 +8,7 @@ using System.Json;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -103,7 +104,10 @@ namespace Kashkeshet.Server
             {
                 clientsJson.Add(id.ToString(), clients[id]);
             }
+
             arguments.Add("clients", clientsJson);
+            IList<Message> messages = _chatsUpdater.GetChatMessages(_chatsUpdater.MainChatId);
+            arguments.Add("message_list", JsonSerializer.Serialize(messages));
             return arguments;
         }
 
