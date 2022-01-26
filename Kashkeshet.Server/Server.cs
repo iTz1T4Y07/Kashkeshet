@@ -81,7 +81,8 @@ namespace Kashkeshet.Server
 
         private void HandleClientDisconnection(object Sender, EventArgs args)
         {
-            _chatsUpdater.RemoveClientFromAllChats((ClientBase)Sender);
+            CancellationTokenSource internalSource = new CancellationTokenSource();
+            _chatsUpdater.RemoveClientFromAllChats((ClientBase)Sender, internalSource.Token).GetAwaiter().GetResult();
         }
 
         private JsonObject GetClientIdArguments(ClientBase client)
