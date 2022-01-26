@@ -29,6 +29,7 @@ namespace Kashkeshet.ConsoleUI
         public async Task Start(CancellationToken token)
         {
             Guid chatId = await GetMainChatId();
+            await InitializeUserName(token);
             InitializeData(chatId);
             await StartInputFlow(token);            
         }
