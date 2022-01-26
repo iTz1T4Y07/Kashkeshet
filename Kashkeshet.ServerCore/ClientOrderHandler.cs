@@ -12,6 +12,7 @@ namespace Kashkeshet.ServerCore
     public class ClientOrderHandler
     {
         public event Func<Guid, Message, CancellationToken, Task> NewMessageArrived; //ChatsUpdater needs to register
+        public event Action<string> ClientNameChanged;
 
         public async Task HandleOperation(Operation operation, JsonObject arguments, CancellationToken token)
         {
@@ -20,6 +21,11 @@ namespace Kashkeshet.ServerCore
             {
                 case Operation.SendMessage:
                     await AddMessageToChat(arguments, token);
+                    break;
+                case Operation.DeclareClientName:
+                    ChangeClientName(arguments, token);
+                    break;
+                default:
                     break;
             }
         }
@@ -35,6 +41,17 @@ namespace Kashkeshet.ServerCore
             Guid chatId = Guid.Parse(arguments["chat_id"]);
             Message message = JsonSerializer.Deserialize<Message>(arguments["message"]);
             await NewMessageArrived?.Invoke(chatId, message, token);
+        }
+
+        private void ChangeClientName(JsonObject arguments, CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+            if (!arguments.ContainsKey("client_name"))
+            {
+                return;
+            }
+            string clientName = arguments["client_name"];
+            ClientNameChanged?.Invoke(clientName);
         }
 
     }
