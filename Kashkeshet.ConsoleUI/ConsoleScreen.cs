@@ -26,19 +26,7 @@ namespace Kashkeshet.ConsoleUI
 
         public async Task Start(CancellationToken token)
         {
-            Guid chatId = _informationExtractor.GetMainChatId();
-            int triesCounter = 0;
-            do
-            {
-                await Task.Delay(1000);
-                chatId = _informationExtractor.GetMainChatId();
-                triesCounter++;
-            }
-            while (chatId == Guid.Empty && triesCounter < 3);
-            if (chatId == Guid.Empty)
-            {
-                throw new OperationCanceledException("Found 0 chats available.");
-            }
+            Guid chatId = await GetMainChatId();
             _currentChat = new ChatScreen(chatId, _informationExtractor, _updater);
             _commandHandler = new CommandHandler(_serverCommunicator, _currentChat);
             _updater.ChatMessageUpdate += ReceivedNewMessage;
@@ -46,7 +34,25 @@ namespace Kashkeshet.ConsoleUI
             _currentChat.Load();
             await StartInputFlow(token);            
         }
-        public async Task StartInputFlow(CancellationToken token)
+
+        private async Task<Guid> GetMainChatId()
+        {
+            Guid chatId = _informationExtractor.GetMainChatId();
+            int triesCounter = 0;
+            while (chatId == Guid.Empty && triesCounter < 3)
+            {
+                if (chatId != Guid.Empty)
+                {
+                    return chatId;
+                }
+                await Task.Delay(1000);
+                chatId = _informationExtractor.GetMainChatId();
+                triesCounter++;
+            }
+            throw new OperationCanceledException("Found 0 chats available.");
+        }
+
+        private async Task StartInputFlow(CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
             while (true)
@@ -57,7 +63,7 @@ namespace Kashkeshet.ConsoleUI
             }
         }
 
-        public void ReceivedNewMessage(Guid chatId, Message message)
+        private void ReceivedNewMessage(Guid chatId, Message message)
         {
             if (chatId == _currentChat.Id)
             {
@@ -65,7 +71,7 @@ namespace Kashkeshet.ConsoleUI
             }
         }
 
-        public void ClientsListChanged(Guid chatId, Guid clientId)
+        private void ClientsListChanged(Guid chatId, Guid clientId)
         {
             if (chatId == _currentChat.Id)
             {
