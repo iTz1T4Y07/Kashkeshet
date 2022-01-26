@@ -54,6 +54,7 @@ namespace Kashkeshet.NetworkBll
             {
                 return;
             }
+            _updater.UserId = Guid.Parse(arguments["client_id"]);
             UpdateClientId?.Invoke(Guid.Parse(arguments["client_id"]));
         }
 
@@ -69,7 +70,7 @@ namespace Kashkeshet.NetworkBll
                 Guid chatId = Guid.Parse(arguments["chat_id"]);
                 IList<Message> messages = new List<Message>();
                 IDictionary<Guid, string> clients = new Dictionary<Guid, string>();
-                JsonObject clientsJson = (JsonObject)JsonObject.Parse(arguments["clients"]);
+                JsonObject clientsJson = (JsonObject)arguments["clients"];
                 foreach (string jsonKey in clientsJson.Keys)
                 {
                     clients.Add(Guid.Parse(jsonKey), clientsJson[jsonKey]);
