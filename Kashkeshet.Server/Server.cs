@@ -37,6 +37,7 @@ namespace Kashkeshet.Server
             {
                 TcpClient newClientConnection = await _listener.AcceptTcpClientAsync();
                 ClientBase newClient = new RegularClient(newClientConnection, serializer, deserializer, clientOrderHandler);
+                newClient.UpdateClientDisconnect += HandleClientDisconnection;
                 CancellationTokenSource tokenSource = new CancellationTokenSource();
                 _clientTokens.Add(newClient, tokenSource);
                 _chatsUpdater.AddClientToChat(_chatsUpdater.MainChatId, newClient);
@@ -53,6 +54,11 @@ namespace Kashkeshet.Server
                 }
                 _ = newClient.ReceiveNewOrder(tokenSource.Token);
             }
+        }
+
+        private void HandleClientDisconnection(object Sender, EventArgs args)
+        {
+            _chatsUpdater.RemoveClientFromAllChats((ClientBase)Sender);
         }
 
         private JsonObject GetClientIdArguments(ClientBase client)
