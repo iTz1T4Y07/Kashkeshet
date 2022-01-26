@@ -51,7 +51,7 @@ namespace Kashkeshet.Server
                         newClientConnection.Close();
                     }
 
-                    _ = Task.Run(() => newClient.ReceiveNewOrder(tokenSource.Token));
+                    _ = Task.Run(() => newClient.ListenForNewOrders(tokenSource.Token));
                 }
             }
         }
@@ -68,7 +68,8 @@ namespace Kashkeshet.Server
             token.ThrowIfCancellationRequested();
             Task<bool> sendClientId = client.UpdateClient(Operation.ClientIdExchange, GetClientIdArguments(client), token);
             Task<bool> sendClientMainChat = client.UpdateClient(Operation.AddNewChat, GetMainChatArguments(), token);
-            bool[] isBasicInformationSentSucessfully = await Task.WhenAll(sendClientId, sendClientMainChat);
+            Task<bool> InitializeClientName = client.ReceiveOneOrder(token);
+            bool[] isBasicInformationSentSucessfully = await Task.WhenAll(sendClientId, sendClientMainChat, InitializeClientName);
             foreach (bool status in isBasicInformationSentSucessfully)
             {
                 if (!status)

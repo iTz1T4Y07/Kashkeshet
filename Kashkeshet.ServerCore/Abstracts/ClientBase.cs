@@ -32,25 +32,34 @@ namespace Kashkeshet.ServerCore.Abstracts
             _orderHandler.ClientNameChanged += (newName => Name = newName);
         }
 
-        public async Task ReceiveNewOrder(CancellationToken token) // Receiving new orders from network
+        public async Task ListenForNewOrders(CancellationToken token) // Receiving new orders from network
         {
             token.ThrowIfCancellationRequested();
             NetworkStream stream = Client.GetStream();
             while (Client.Connected && stream.CanRead)
             {
-                token.ThrowIfCancellationRequested();
-                try
-                {
-                    byte[] receivedData = await ReadNewMessage(stream, token);
-                    token.ThrowIfCancellationRequested();
-                    await HandleNewOrder(receivedData, token);
-                }
-                catch (IOException e)
-                {
-                    Client.Close();
-                    UpdateClientDisconnect?.Invoke(this, EventArgs.Empty);
-                }
+                await ReceiveOneOrder(token);
             }            
+        }
+
+        public async Task<bool> ReceiveOneOrder(CancellationToken token)
+        {
+            byte[] receivedData;
+            NetworkStream stream = Client.GetStream();
+            token.ThrowIfCancellationRequested();
+            try
+            {
+                receivedData = await ReadNewMessage(stream, token);
+            }
+            catch (IOException e)
+            {
+                Client.Close();
+                UpdateClientDisconnect?.Invoke(this, EventArgs.Empty);
+                return false;
+            }
+            token.ThrowIfCancellationRequested();
+            await HandleNewOrder(receivedData, token);
+            return true;
         }
 
         public virtual async Task<bool> UpdateClient(Operation operation, JsonObject operationArguments, CancellationToken token) // Sending updates to remote client via network
